@@ -3,6 +3,7 @@ import { Alert, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { supabase } from '../../lib/supabase';
 import { Input } from 'react-native-elements';
 import { Link } from 'expo-router';
+import { showToast } from '../../lib/toast';
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState('');
@@ -20,11 +21,11 @@ export default function SignUpScreen() {
     });
 
     if (error) {
-      Alert.alert(error.message);
+      showToast(error.message);
     } else {
       // Todo - enable email verification in Supabase when not testing anymore
       //Alert.alert('Please check your inbox for email verification!');
-      Alert.alert('Sign up successful!');
+      showToast('Sign up successful! Please log in.');
     }
 
     setLoading(false);

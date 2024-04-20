@@ -1,10 +1,12 @@
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import Colors from '../../constants/Colors';
 import { useColorScheme } from '../../components/useColorScheme';
+import Header from '../../components/Header';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
@@ -15,51 +17,62 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const insets = useSafeAreaInsets();
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: true,
-      }}
-    >
-      <Tabs.Screen
-        name='index'
-        options={{
-          title: 'Duties',
-          tabBarIcon: ({ color }) => <TabBarIcon name='code' color={color} />,
-          headerRight: () => (
-            <Link href='/modal' asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name='info-circle'
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
+    <>
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+          // Disable the static render of the header on web
+          // to prevent a hydration error in React Navigation v6.
+          headerShown: true,
+          // header: () => <Header />,
         }}
-      />
-      <Tabs.Screen
-        name='groups'
-        options={{
-          title: 'Csoportok',
-          tabBarIcon: ({ color }) => <TabBarIcon name='code' color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name='settings'
-        options={{
-          title: 'Beállítások',
-          tabBarIcon: ({ color }) => <TabBarIcon name='cog' color={color} />,
-        }}
-      />
-    </Tabs>
+      >
+        <Tabs.Screen
+          name='index'
+          options={{
+            title: 'Duties',
+            tabBarIcon: ({ color }) => <TabBarIcon name='code' color={color} />,
+            headerRight: () => (
+              <Link href='/modal' asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <FontAwesome
+                      name='info-circle'
+                      size={25}
+                      color={Colors[colorScheme ?? 'light'].text}
+                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                    />
+                  )}
+                </Pressable>
+              </Link>
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name='header'
+          options={{
+            title: 'Header',
+            tabBarIcon: ({ color }) => <TabBarIcon name='code' color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name='groups'
+          options={{
+            title: 'Csoportok',
+            tabBarIcon: ({ color }) => <TabBarIcon name='code' color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name='settings'
+          options={{
+            title: 'Beállítások',
+            tabBarIcon: ({ color }) => <TabBarIcon name='cog' color={color} />,
+          }}
+        />
+      </Tabs>
+    </>
   );
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Alert, Text, View } from 'react-native';
+import { router } from 'expo-router';
 
 interface Profile {
   full_name: string;
@@ -8,10 +9,6 @@ interface Profile {
 }
 
 async function getUserProfile(userId: string): Promise<Profile> {
-  // return {
-  //   full_name: 'John Doe',
-  //   email: 'johndoe@gmail.com',
-  // } satisfies Profile;
   const { data, error } = await supabase
     .from('profiles')
     .select()
@@ -33,8 +30,8 @@ export default function SettingsPage() {
           setProfile(profile);
         });
       } else {
-        //router.replace('/(auth)/login');
         Alert.alert('You are not authenticated');
+        router.replace('/(auth)/login');
       }
     });
   }, []);

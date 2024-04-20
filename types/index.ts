@@ -16,3 +16,13 @@ export enum DutyType {
   Desk = 'Desk',
   Other = 'Other',
 }
+
+export interface Profile {
+  created_at: string;
+  email: string;
+  full_name: string;
+  id: string;
+  phone: string;
+  pumpsz: number;
+  updated_at: string;
+}

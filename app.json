@@ -2,7 +2,7 @@
   "expo": {
     "name": "neighbourhood-watch",
     "slug": "neighbourhood-watch",
-    "scheme": "com.htmlastic.neighbourhood-watch",
+    "scheme": "dev.htmlastic.neighbourhoodwatch",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,9 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },

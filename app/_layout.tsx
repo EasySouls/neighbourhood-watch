@@ -11,6 +11,15 @@ import { useEffect } from 'react';
 
 import { useColorScheme } from '../components/useColorScheme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {
+  focusManager,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
+import { AppStateStatus, Platform } from 'react-native';
+import { useOnlineManager } from '../hooks/useOnlineManager';
+import { useAppState } from '../hooks/useAppState';
+import '../global.css';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -22,10 +31,22 @@ export const unstable_settings = {
   initialRouteName: '(tabs)',
 };
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 2,
+    },
+  },
+});
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  useOnlineManager();
+
+  useAppState(onAppStateChange);
+
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
@@ -42,11 +63,15 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  if (!loaded) {
+  if (!loaded && !error) {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RootLayoutNav />
+    </QueryClientProvider>
+  );
 }
 
 function RootLayoutNav() {
@@ -63,4 +88,10 @@ function RootLayoutNav() {
       </ThemeProvider>
     </SafeAreaProvider>
   );
+}
+
+function onAppStateChange(status: AppStateStatus) {
+  if (Platform.OS != 'web') {
+    focusManager.setFocused(status === 'active');
+  }
 }

@@ -1,18 +1,39 @@
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
-import { Pressable, View } from 'react-native';
+import { Pressable, View, Text } from 'react-native';
 
 import Colors from '../../constants/Colors';
 import { useColorScheme } from '../../components/useColorScheme';
 import Header from '../../components/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
+interface TabBarIconProps {
+  name: string;
+  iconName: React.ComponentProps<typeof FontAwesome>['name'];
   color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+  focused: boolean;
+}
+
+function TabBarIcon(props: TabBarIconProps) {
+  return (
+    <View className='items-center justify-center gap-2'>
+      <FontAwesome
+        size={28}
+        style={{ marginBottom: -3 }}
+        color={props.color}
+        name={props.iconName}
+      />
+      <Text
+        className={`${
+          props.focused ? 'font-psemibold' : 'font-pregular'
+        } text-xs`}
+        style={{ color: props.color }}
+      >
+        {props.name}
+      </Text>
+    </View>
+  );
 }
 
 export default function TabLayout() {
@@ -23,7 +44,16 @@ export default function TabLayout() {
     <>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+          // tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tabIconSelected,
+          tabBarActiveTintColor: '#FFA001',
+          tabBarInactiveTintColor: '#CDCDE0',
+          tabBarStyle: {
+            backgroundColor: '#161622',
+            borderTopWidth: 1,
+            borderTopColor: '#232533',
+            height: 60 + insets.bottom,
+          },
+          tabBarShowLabel: false,
           // Disable the static render of the header on web
           // to prevent a hydration error in React Navigation v6.
           headerShown: true,
@@ -34,7 +64,14 @@ export default function TabLayout() {
           name='index'
           options={{
             title: 'Duties',
-            tabBarIcon: ({ color }) => <TabBarIcon name='code' color={color} />,
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                iconName='car'
+                color={color}
+                name='Szolgálatok'
+                focused={focused}
+              />
+            ),
             headerRight: () => (
               <Link href='/modal' asChild>
                 <Pressable>
@@ -52,24 +89,31 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name='header'
+          name='calendar'
           options={{
-            title: 'Header',
-            tabBarIcon: ({ color }) => <TabBarIcon name='code' color={color} />,
-          }}
-        />
-        <Tabs.Screen
-          name='groups'
-          options={{
-            title: 'Csoportok',
-            tabBarIcon: ({ color }) => <TabBarIcon name='code' color={color} />,
+            title: 'Naptár',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                iconName='calendar'
+                color={color}
+                name='Naptár'
+                focused={focused}
+              />
+            ),
           }}
         />
         <Tabs.Screen
           name='settings'
           options={{
             title: 'Beállítások',
-            tabBarIcon: ({ color }) => <TabBarIcon name='cog' color={color} />,
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                iconName='cog'
+                color={color}
+                name='Beállítások'
+                focused={focused}
+              />
+            ),
           }}
         />
       </Tabs>

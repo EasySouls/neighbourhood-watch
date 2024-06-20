@@ -3,17 +3,19 @@ import { Alert, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { supabase } from '../../lib/supabase';
 import { Button, Input } from 'react-native-elements';
 import { Link, router } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import FormField from '../../components/forms/FormField';
+import FormPasswordField from '../../components/forms/FormPasswordField';
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
 
   async function signInWithEmail() {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
+      email: form.email,
+      password: form.password,
     });
 
     if (error) {
@@ -26,26 +28,23 @@ export default function LoginScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Input
-          label='Email'
-          leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-          placeholder='email@address.com'
-          autoCapitalize={'none'}
+        <FormField
+          title='Email'
+          value={form.email}
+          placeholder='example@email.com'
+          onChangeText={(text) => setForm({ ...form, email: text })}
+          styles='mt-4'
         />
       </View>
       <View style={styles.verticallySpaced}>
-        <Input
-          label='Password'
-          leftIcon={{ type: 'font-awesome', name: 'lock' }}
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-          secureTextEntry={true}
-          placeholder='Password'
-          autoCapitalize={'none'}
+        <FormPasswordField
+          title='Password'
+          value={form.password}
+          placeholder='super-secret-password'
+          onChangeText={(text) => setForm({ ...form, password: text })}
+          styles='mt-4'
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
@@ -63,7 +62,7 @@ export default function LoginScreen() {
           Sign Up
         </Link>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

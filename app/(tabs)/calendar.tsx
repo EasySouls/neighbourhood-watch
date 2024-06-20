@@ -1,9 +1,9 @@
 import { StyleSheet, View, Text } from 'react-native';
 
-export default function GroupsScreen() {
+export default function CalendarScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
+      <Text style={styles.title}>Calendar</Text>
       <View style={styles.separator} />
     </View>
   );

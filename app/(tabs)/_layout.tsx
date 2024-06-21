@@ -103,6 +103,20 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
+          name='files'
+          options={{
+            title: 'Fájlok',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                iconName='file-archive-o'
+                color={color}
+                name='Fájlok'
+                focused={focused}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
           name='settings'
           options={{
             title: 'Beállítások',

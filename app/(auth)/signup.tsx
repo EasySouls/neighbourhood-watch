@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase';
 import { Input } from 'react-native-elements';
 import { Link } from 'expo-router';
 import { showToast } from '../../lib/toast';
+import { StatusBar } from 'expo-status-bar';
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState('');
@@ -69,6 +70,7 @@ export default function SignUpScreen() {
           Log in
         </Link>
       </View>
+      <StatusBar style='auto' backgroundColor='#161622' />
     </View>
   );
 }

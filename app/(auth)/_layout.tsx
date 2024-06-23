@@ -1,5 +1,4 @@
 import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 
 export default function AuthLayout() {
   return (
@@ -12,8 +11,6 @@ export default function AuthLayout() {
         name='signup'
         options={{ headerShown: true, title: 'Neighbourhood Watch' }}
       />
-
-      <StatusBar style='auto' backgroundColor='#161622' />
     </Stack>
   );
 }

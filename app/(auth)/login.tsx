@@ -6,6 +6,7 @@ import { Link, router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FormField from '../../components/forms/FormField';
 import FormPasswordField from '../../components/forms/FormPasswordField';
+import { StatusBar } from 'expo-status-bar';
 
 export default function LoginScreen() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -62,6 +63,7 @@ export default function LoginScreen() {
           Sign Up
         </Link>
       </View>
+      <StatusBar style='auto' />
     </SafeAreaView>
   );
 }

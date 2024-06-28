@@ -20,6 +20,7 @@ import { AppStateStatus, Platform } from 'react-native';
 import { useOnlineManager } from '../hooks/useOnlineManager';
 import { useAppState } from '../hooks/useAppState';
 import '../global.css';
+import { initAxios, queryClient } from '../lib/queryClient';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -31,16 +32,11 @@ export const unstable_settings = {
   initialRouteName: '(tabs)',
 };
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 2,
-    },
-  },
-});
-
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+// Configure Axios for API requests.
+initAxios();
 
 export default function RootLayout() {
   useOnlineManager();

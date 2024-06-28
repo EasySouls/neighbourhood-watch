@@ -1,30 +1,47 @@
 import { StyleSheet } from 'react-native';
 
 import { Text, View } from 'react-native';
-import ActiveDuty from '../../components/duties/ActiveDuty';
+import ActiveCurrentPatrol from '../../components/duties/ActiveCurrentPatrol';
 import { Duty, DutyType } from '../../types';
+import { useQuery } from '@tanstack/react-query';
+import {
+  getActiveDuties,
+  getOwnActiveDuty,
+  stopActiveDuty,
+} from '../../lib/duties';
+import ActiveDuties from '../../components/duties/ActiveDuties';
 
 export default function HomeScreen() {
-  // TODO - get active duties for logged in user
+  const departmentId = '5f519f92-1468-4bbb-8e7f-df34e3ce527b';
+  const userId = '5f519f92-1468-4bbb-8e7f-df34e3ce527b';
 
-  const duty: Duty = {
-    id: 'rewerwewr3r2wer',
-    name: 'Járőrözés',
-    started_at: new Date().toDateString(),
-    created_at: new Date().toDateString(),
-    user_id: 'kqhefkqewf',
-    plate_num: '324LJK',
-    ended_at: null,
-    type: DutyType.Patrol,
-    description: 'Körbenézünk errefele nincs-e baj',
-  };
+  const activeDuties = useQuery({
+    queryKey: ['duties', 'active'],
+    queryFn: () => getActiveDuties(departmentId),
+  });
+
+  const ownActiveDuty = useQuery({
+    queryKey: ['duties', 'active'],
+    queryFn: () => getOwnActiveDuty(userId, departmentId),
+  });
 
   return (
     <View style={styles.container}>
-      {duty ? (
-        <ActiveDuty duty={duty} onEnd={() => {}} />
+      {ownActiveDuty.data ? (
+        <ActiveCurrentPatrol
+          duty={ownActiveDuty.data}
+          onEnd={() => {
+            // TODO - refactor this to use the query cache
+            stopActiveDuty(ownActiveDuty.data!.id);
+          }}
+        />
       ) : (
-        <Text>Currently no duties are available</Text>
+        <Text>You are not on duty</Text>
+      )}
+      {activeDuties.data ? (
+        <ActiveDuties duties={activeDuties.data} />
+      ) : (
+        <Text>There are no active duties</Text>
       )}
     </View>
   );
@@ -35,6 +52,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    color: 'white',
   },
   title: {
     fontSize: 20,

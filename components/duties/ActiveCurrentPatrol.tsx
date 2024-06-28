@@ -2,12 +2,12 @@ import { dutyTypeToString } from '../../lib/utils';
 import { Duty } from '../../types';
 import { StyleSheet, Text, View } from 'react-native';
 
-interface ActiveDutyProps {
+interface ActiveCurrentPatrolProps {
   duty: Duty;
   onEnd: () => void;
 }
 
-function ActiveDuty({ duty, onEnd }: ActiveDutyProps) {
+function ActiveCurrentPatrol({ duty, onEnd }: ActiveCurrentPatrolProps) {
   return (
     <View style={styles.container}>
       {/* Info Bar */}
@@ -40,4 +40,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ActiveDuty;
+export default ActiveCurrentPatrol;

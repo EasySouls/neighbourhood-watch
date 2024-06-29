@@ -1,4 +1,4 @@
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput, StyleProp, ViewStyle } from 'react-native';
 
 type FormFieldProps = {
   title: string;

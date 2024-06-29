@@ -36,7 +36,7 @@ export default function LoginScreen() {
       </View>
       <View style={styles.verticallySpaced}>
         <FormPasswordField
-          title='Password'
+          title='Jelszó'
           value={form.password}
           placeholder='super-secret-password'
           onChangeText={(text) => setForm({ ...form, password: text })}
@@ -49,13 +49,24 @@ export default function LoginScreen() {
           style={styles.buttonContainer}
           onPress={() => signInWithEmail()}
         >
-          <Text style={styles.buttonText}>LOGIN</Text>
+          <Text style={styles.buttonText}>BELÉPÉS</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.verticallySpaced}>
-        <Text>Don't have an account yet?</Text>
-        <Link href={'/(auth)/signup'} style={{ fontWeight: 'bold' }}>
-          Sign Up
+      <View style={[styles.verticallySpaced, { marginTop: 12 }]}>
+        <Text style={{ color: 'white', marginLeft: 8 }}>
+          Nem vagy még regisztrálva?
+        </Text>
+        <Link
+          href={'/(auth)/signup'}
+          style={{
+            fontWeight: 'bold',
+            color: 'white',
+            marginLeft: 8,
+            textDecorationLine: 'underline',
+            textDecorationColor: 'white',
+          }}
+        >
+          Regisztráció
         </Link>
       </View>
       <StatusBar style='auto' />

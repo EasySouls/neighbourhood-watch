@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { Input } from 'react-native-elements';
-import { Link } from 'expo-router';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import { showToast } from '../../lib/toast';
 import { StatusBar } from 'expo-status-bar';
+import FormField from '../../components/forms/FormField';
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
 
-  async function signUpWithEmail() {
+  async function signUpWithCode() {
     setLoading(true);
     const error = { message: 'Auth not implemented' };
+
+    setTimeout(() => {}, 1000);
 
     if (error) {
       showToast(error.message);
     } else {
-      // Todo - enable email verification in Supabase when not testing anymore
-      //Alert.alert('Please check your inbox for email verification!');
       showToast('Sign up successful! Please log in.');
     }
 
@@ -27,42 +32,44 @@ export default function SignUpScreen() {
 
   return (
     <View style={styles.container}>
+      <Text
+        style={[
+          styles.verticallySpaced,
+          { color: 'white', fontSize: 24, marginTop: 20, marginBottom: 20 },
+        ]}
+      >
+        Lépj be az email címeddel és a kapott kóddal
+      </Text>
+      <FormField
+        title='Kód'
+        value={code}
+        onChangeText={(e) => setCode(e)}
+        placeholder='******'
+        styles='mt-8'
+      />
+      <FormField
+        title='Email'
+        value={email}
+        onChangeText={(e) => setEmail(e)}
+        placeholder='example@gmail.com'
+        styles='mt-8'
+      />
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Input
-          label='Email'
-          leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-          placeholder='email@address.com'
-          autoCapitalize={'none'}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Input
-          label='Password'
-          leftIcon={{ type: 'font-awesome', name: 'lock' }}
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-          secureTextEntry={true}
-          placeholder='Password'
-          autoCapitalize={'none'}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
         <TouchableOpacity
           disabled={loading}
-          onPress={() => signUpWithEmail()}
           style={styles.buttonContainer}
+          onPress={() => signUpWithCode()}
         >
-          <Text style={styles.buttonText}>SIGN UP</Text>
+          <Text style={styles.buttonText}>ELLENŐRZÉS</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.verticallySpaced}>
-        <Text>Already have an account?</Text>
-        <Link href={'/(auth)/login'} style={{ fontWeight: 'bold' }}>
-          Log in
-        </Link>
-      </View>
+      {loading && (
+        <ActivityIndicator
+          size='large'
+          color='#0070f3'
+          style={styles.verticallySpaced}
+        />
+      )}
       <StatusBar style='auto' backgroundColor='#161622' />
     </View>
   );
@@ -71,7 +78,9 @@ export default function SignUpScreen() {
 const styles = StyleSheet.create({
   container: {
     marginTop: 40,
-    padding: 12,
+    padding: 16,
+    height: '100%',
+    display: 'flex',
   },
   buttonContainer: {
     backgroundColor: '#0070f3',

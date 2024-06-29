@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Alert, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { supabase } from '../../lib/supabase';
-import { Button, Input } from 'react-native-elements';
 import { Link, router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FormField from '../../components/forms/FormField';
@@ -14,10 +12,7 @@ export default function LoginScreen() {
 
   async function signInWithEmail() {
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email: form.email,
-      password: form.password,
-    });
+    const error = { message: 'Auth not implemented' };
 
     if (error) {
       Alert.alert(error.message);

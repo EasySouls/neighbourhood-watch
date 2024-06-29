@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { supabase } from '../../lib/supabase';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Input } from 'react-native-elements';
 import { Link } from 'expo-router';
 import { showToast } from '../../lib/toast';
@@ -13,13 +12,7 @@ export default function SignUpScreen() {
 
   async function signUpWithEmail() {
     setLoading(true);
-    const {
-      data: { session },
-      error,
-    } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    });
+    const error = { message: 'Auth not implemented' };
 
     if (error) {
       showToast(error.message);

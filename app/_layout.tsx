@@ -11,11 +11,7 @@ import { useEffect } from 'react';
 
 import { useColorScheme } from '../components/useColorScheme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import {
-  focusManager,
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query';
+import { focusManager, QueryClientProvider } from '@tanstack/react-query';
 import { AppStateStatus, Platform } from 'react-native';
 import { useOnlineManager } from '../hooks/useOnlineManager';
 import { useAppState } from '../hooks/useAppState';
@@ -45,6 +41,10 @@ export default function RootLayout() {
 
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    'Poppins-Regular': require('../assets/fonts/Poppins-Regular.ttf'),
+    'Poppins-SemiBold': require('../assets/fonts/Poppins-SemiBold.ttf'),
+    'Poppins-Bold': require('../assets/fonts/Poppins-Bold.ttf'),
+    'Poppins-Thin': require('../assets/fonts/Poppins-Thin.ttf'),
     ...FontAwesome.font,
   });
 

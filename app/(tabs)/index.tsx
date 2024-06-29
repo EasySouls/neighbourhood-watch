@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Text, View } from 'react-native';
 import ActiveCurrentPatrol from '../../components/duties/ActiveCurrentPatrol';
 import { Duty, DutyType } from '../../types';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   getActiveDuties,
   getOwnActiveDuty,
@@ -25,14 +25,17 @@ export default function HomeScreen() {
     queryFn: () => getOwnActiveDuty(userId, departmentId),
   });
 
+  const stopActiveDutyMutation = useMutation({
+    mutationFn: (dutyId: string) => stopActiveDuty(dutyId),
+  });
+
   return (
     <View style={styles.container}>
       {ownActiveDuty.data ? (
         <ActiveCurrentPatrol
           duty={ownActiveDuty.data}
           onEnd={() => {
-            // TODO - refactor this to use the query cache
-            stopActiveDuty(ownActiveDuty.data!.id);
+            stopActiveDutyMutation.mutate(ownActiveDuty.data!.id);
           }}
         />
       ) : (

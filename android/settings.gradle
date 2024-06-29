@@ -1,4 +1,4 @@
-rootProject.name = 'neighbourhood-watch'
+rootProject.name = 'Neighbourhood Watch'
 
 dependencyResolutionManagement {
   versionCatalogs {

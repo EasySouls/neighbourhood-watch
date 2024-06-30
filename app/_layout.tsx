@@ -15,7 +15,6 @@ import { focusManager, QueryClientProvider } from '@tanstack/react-query';
 import { AppStateStatus, Platform } from 'react-native';
 import { useOnlineManager } from '../hooks/useOnlineManager';
 import { useAppState } from '../hooks/useAppState';
-import '../global.css';
 import { initAxios, queryClient } from '../lib/queryClient';
 
 export {
@@ -76,10 +75,11 @@ function RootLayoutNav() {
   return (
     <SafeAreaProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack initialRouteName='(auth)'>
+        <Stack>
           <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
           <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
           <Stack.Screen name='(auth)' options={{ headerShown: false }} />
+          <Stack.Screen name='duties' options={{ headerShown: false }} />
         </Stack>
       </ThemeProvider>
     </SafeAreaProvider>

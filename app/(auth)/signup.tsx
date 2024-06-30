@@ -45,14 +45,14 @@ export default function SignUpScreen() {
         value={code}
         onChangeText={(e) => setCode(e)}
         placeholder='******'
-        styles='mt-8'
+        styles={{ marginTop: 12 }}
       />
       <FormField
         title='Email'
         value={email}
         onChangeText={(e) => setEmail(e)}
         placeholder='example@gmail.com'
-        styles='mt-8'
+        styles={{ marginTop: 12 }}
       />
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <TouchableOpacity

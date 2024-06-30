@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 
 import { Text, View } from 'react-native';
 import ActiveCurrentPatrol from '../../components/duties/ActiveCurrentPatrol';
@@ -10,6 +10,7 @@ import {
   stopActiveDuty,
 } from '../../lib/duties';
 import ActiveDuties from '../../components/duties/ActiveDuties';
+import { Link } from 'expo-router';
 
 export default function HomeScreen() {
   const departmentId = '5f519f92-1468-4bbb-8e7f-df34e3ce527b';
@@ -31,6 +32,9 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
+      <Link href='/duties/1' asChild>
+        <Pressable>Szolgálat 1</Pressable>
+      </Link>
       {ownActiveDuty.data ? (
         <ActiveCurrentPatrol
           duty={ownActiveDuty.data}

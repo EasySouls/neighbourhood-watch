@@ -17,7 +17,7 @@ interface TabBarIconProps {
 
 function TabBarIcon(props: TabBarIconProps) {
   return (
-    <View className='items-center justify-center gap-2'>
+    <View style={{ alignItems: 'center', justifyContent: 'center', gap: 2 }}>
       <FontAwesome
         size={28}
         style={{ marginBottom: -3 }}
@@ -25,9 +25,9 @@ function TabBarIcon(props: TabBarIconProps) {
         name={props.iconName}
       />
       <Text
-        className={`${
-          props.focused ? 'font-psemibold' : 'font-pregular'
-        } text-xs`}
+        // className={`${
+        //   props.focused ? 'font-psemibold' : 'font-pregular'
+        // } text-xs`}
         style={{ color: props.color }}
       >
         {props.name}

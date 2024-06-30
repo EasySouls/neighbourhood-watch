@@ -36,7 +36,8 @@
     "react-native-view-shot": "3.8.0",
     "react-native-web": "~0.19.10",
     "expo-auth-session": "~5.5.2",
-    "expo-web-browser": "~13.0.3"
+    "expo-web-browser": "~13.0.3",
+    "expo-dev-client": "~4.0.19"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

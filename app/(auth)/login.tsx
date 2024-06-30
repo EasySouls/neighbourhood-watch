@@ -31,7 +31,7 @@ export default function LoginScreen() {
           value={form.email}
           placeholder='example@email.com'
           onChangeText={(text) => setForm({ ...form, email: text })}
-          styles='mt-4'
+          styles={{ marginTop: 12 }}
         />
       </View>
       <View style={styles.verticallySpaced}>
@@ -40,7 +40,7 @@ export default function LoginScreen() {
           value={form.password}
           placeholder='super-secret-password'
           onChangeText={(text) => setForm({ ...form, password: text })}
-          styles='mt-4'
+          styles={{ marginTop: 12 }}
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>

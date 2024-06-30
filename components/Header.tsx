@@ -10,22 +10,31 @@ export default function Header() {
 
   return (
     <View style={[styles.container, { top: insets.top }]}>
-      <Image />
+      <Image
+        source={require('../assets/adaptive-icon.png')}
+        style={{ width: 40, height: 40 }}
+      />
       <View>
-        <Text>Full name: {profile?.full_name}</Text>
-        <Text>Email: {profile?.email}</Text>
+        <Text style={{ color: 'white', fontSize: 18 }}>Header</Text>
+        <Text style={{ color: 'white', fontSize: 12 }}>Subtitle</Text>
       </View>
-      <Image />
+      <Image
+        source={require('../assets/icon.png')}
+        style={{ width: 40, height: 40 }}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    display: 'flex',
+    flexDirection: 'row',
     flex: 1,
-    height: 30,
-    backgroundColor: 'red',
+    height: 'auto',
+    minHeight: 40,
     alignItems: 'center',
     justifyContent: 'space-between',
+    backgroundColor: '#161622',
   },
 });

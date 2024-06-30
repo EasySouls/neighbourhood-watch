@@ -32,8 +32,10 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Link href='/duties/1' asChild>
-        <Pressable>Szolgálat 1</Pressable>
+      <Link href='/duties/sd/1' asChild>
+        <Pressable>
+          <Text>Szolgálat 1</Text>
+        </Pressable>
       </Link>
       {ownActiveDuty.data ? (
         <ActiveCurrentPatrol

@@ -14,9 +14,9 @@ import FormPasswordField from '../../components/forms/FormPasswordField';
 import { StatusBar } from 'expo-status-bar';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { showToast } from '../../lib/toast';
 import axios from 'axios';
+import LocalStore, { USER_KEY } from '../../lib/store';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -36,21 +36,21 @@ export default function LoginScreen() {
 
     if (error) {
       showToast(error.message);
-      setLoading(false);
     }
     if (!error) {
       router.replace('/');
     }
+
+    setLoading(false);
   }
 
   async function signInWithGoogle() {
     setLoading(true);
-    const user = await AsyncStorage.getItem('@user');
+    const user = await LocalStore.getItem(USER_KEY);
     if (user) {
       setUserInfo(JSON.parse(user));
       showToast('Már be vagy jelentkezve!');
       // router.replace('/');
-      return;
     }
 
     if (response?.type === 'success') {
@@ -67,7 +67,7 @@ export default function LoginScreen() {
       });
 
       const user = res.data;
-      await AsyncStorage.setItem('@user', JSON.stringify(user));
+      await LocalStore.setItem(USER_KEY, JSON.stringify(user));
       setUserInfo(user);
     } catch (error) {
       console.error('Error getting user info: ', error);
@@ -79,15 +79,22 @@ export default function LoginScreen() {
     signInWithGoogle();
   }, [response]);
 
+  React.useEffect(() => {
+    WebBrowser.warmUpAsync();
+
+    return () => {
+      WebBrowser.coolDownAsync();
+    };
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text>{JSON.stringify(userInfo, null, 2)}</Text>
-      {userInfo && (
+      {userInfo ? (
         <Image
           source={{ uri: userInfo.picture }}
           style={{ width: 100, height: 100, borderRadius: 50 }}
         />
-      )}
+      ) : null}
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <FormField
           title='Email'

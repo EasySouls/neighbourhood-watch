@@ -16,6 +16,7 @@ import { AppStateStatus, Platform } from 'react-native';
 import { useOnlineManager } from '../hooks/useOnlineManager';
 import { useAppState } from '../hooks/useAppState';
 import { initAxios, queryClient } from '../lib/queryClient';
+import { AuthProvider } from '../context/AuthContext';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -64,7 +65,9 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <RootLayoutNav />
+      <AuthProvider>
+        <RootLayoutNav />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

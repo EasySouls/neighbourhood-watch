@@ -25,6 +25,8 @@ export default function LoginScreen() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
 
+  // TODO - Replace login with AuthContext
+
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_ANDROID_DEV,
     webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_WEB_DEV,
@@ -46,7 +48,7 @@ export default function LoginScreen() {
 
   async function signInWithGoogle() {
     setLoading(true);
-    const user = await LocalStore.getItem(USER_KEY);
+    const user = await LocalStore.getItemAsync(USER_KEY);
     if (user) {
       setUserInfo(JSON.parse(user));
       showToast('Már be vagy jelentkezve!');
@@ -67,7 +69,7 @@ export default function LoginScreen() {
       });
 
       const user = res.data;
-      await LocalStore.setItem(USER_KEY, JSON.stringify(user));
+      await LocalStore.setItemAsync(USER_KEY, JSON.stringify(user));
       setUserInfo(user);
     } catch (error) {
       console.error('Error getting user info: ', error);

@@ -1,12 +1,13 @@
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
+import { Link, Redirect, Tabs } from 'expo-router';
 import { Pressable, View, Text } from 'react-native';
 
 import Colors from '../../constants/Colors';
 import { useColorScheme } from '../../components/useColorScheme';
 import Header from '../../components/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAuth } from '../../context/AuthContext';
 
 interface TabBarIconProps {
   name: string;
@@ -39,6 +40,12 @@ function TabBarIcon(props: TabBarIconProps) {
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const insets = useSafeAreaInsets();
+
+  const { authState } = useAuth();
+
+  if (!authState?.authenticated) {
+    return <Redirect href='/(auth)/login' />;
+  }
 
   return (
     <>

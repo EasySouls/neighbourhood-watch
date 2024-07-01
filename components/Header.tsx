@@ -3,17 +3,17 @@ import { useState } from 'react';
 import { Profile } from '../types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { useAuth } from '../context/AuthContext';
+import { showToast } from '../lib/toast';
 
 export default function Header() {
   const router = useRouter();
-  const [profile, setProfile] = useState<Profile>();
-
+  const { authState } = useAuth();
   const insets = useSafeAreaInsets();
 
   const onProfilePress = () => {
-    const loggedIn = profile !== undefined;
-    if (loggedIn) {
-      // Navigate to profile
+    if (authState?.authenticated) {
+      showToast('You are already logged in!');
     } else {
       router.replace('/(auth)/login');
     }

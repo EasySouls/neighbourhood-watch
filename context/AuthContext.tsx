@@ -1,11 +1,23 @@
 import axios, { AxiosError } from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
 import LocalStore from '../lib/store';
+import { CodeConfirmResponse, SignUpResponse } from '../types';
 
 interface AuthProps {
   authState?: { token: string | null; authenticated: boolean | null };
-  onRegister?: (email: string, password: string) => Promise<any>;
-  onLogin?: (email: string, password: string) => Promise<any>;
+  onCodeConfirmSent?: (
+    email: string,
+    code: number
+  ) => Promise<CodeConfirmResponse>;
+  onSignUp?: (
+    email: string,
+    password: string,
+    authCode: number
+  ) => Promise<SignUpResponse>;
+  onLogin?: (
+    email: string,
+    password: string
+  ) => Promise<{ error: string | null }>;
   onLogout?: () => Promise<any>;
 }
 
@@ -42,37 +54,70 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     loadToken();
   }, []);
 
-  const register = async (email: string, password: string) => {
+  const sendCodeConfirm = async (
+    email: string,
+    code: number
+  ): Promise<CodeConfirmResponse> => {
     try {
-      return await axios.post('/auth/register', { email, password });
+      const res = await axios.post('/auth/validateCode', { email, code });
+      return res.data;
     } catch (e) {
-      console.error('Error registering:', e);
+      console.error('Error sending code confirmation:', e);
       if (e instanceof AxiosError) {
-        return { error: e.message, msg: e.response?.data.msg };
+        return { isValid: false, name: null };
       }
-      return { error: (e as any).message, msg: 'An error occurred' };
+      return { isValid: false, name: null };
     }
   };
 
-  const login = async (email: string, password: string) => {
+  const signUp = async (
+    email: string,
+    password: string,
+    authCode: number
+  ): Promise<SignUpResponse> => {
     try {
-      const res = await axios.post('/auth/login', { email, password });
+      const res = await axios.post('/auth/signup', {
+        email,
+        password,
+        authCode,
+      });
+      return { error: null, account: res.data };
+    } catch (e) {
+      console.error('Error registering:', e);
+      if (e instanceof AxiosError) {
+        return { error: e.message, account: null };
+      }
+      return { error: (e as any).message, account: null };
+    }
+  };
 
-      setAuthState({ token: res.data.token, authenticated: true });
+  const login = async (
+    email: string,
+    password: string
+  ): Promise<{ error: string | null }> => {
+    try {
+      const res = await axios.post<{ access_token: string }>('/auth/login', {
+        email,
+        password,
+      });
+
+      setAuthState({ token: res.data.access_token, authenticated: true });
 
       axios.defaults.headers.common[
         'Authorization'
-      ] = `Bearer ${res.data.token}`;
+      ] = `Bearer ${res.data.access_token}`;
 
-      await LocalStore.setItemAsync(TOKEN_KEY, res.data.token);
+      console.log('Token:', res.data.access_token);
 
-      return res.data;
+      await LocalStore.setItemAsync(TOKEN_KEY, res.data.access_token);
+
+      return { error: null };
     } catch (e) {
       console.error('Error logging in:', e);
       if (e instanceof AxiosError) {
-        return { error: e.message, msg: e.response?.data.msg };
+        return { error: e.message };
       }
-      return { error: (e as any).message, msg: 'An error occurred' };
+      return { error: 'An error occurred' };
     }
   };
 
@@ -95,7 +140,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const value = {
-    onRegister: register,
+    onSignUp: signUp,
+    onCodeConfirmSent: sendCodeConfirm,
     onLogin: login,
     onLogout: logout,
     authState,

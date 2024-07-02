@@ -1,11 +1,19 @@
-import { View, Text, TextInput, StyleProp, ViewStyle } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
 
 type FormFieldProps = {
   title: string;
   value: string;
   placeholder: string;
   onChangeText: (text: string) => void;
-  styles: StyleProp<ViewStyle>;
+  style: StyleProp<ViewStyle>;
+  textStyle: StyleProp<TextStyle>;
   secureTextEntry?: boolean;
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
 };
@@ -15,30 +23,42 @@ const FormField = ({
   value,
   placeholder,
   onChangeText,
-  styles,
+  style,
+  textStyle,
   secureTextEntry = false,
   autoCapitalize = 'none',
 }: FormFieldProps) => {
   return (
     <View
       style={[
-        styles,
+        style,
         {
           /* space-y-2 */
         },
       ]}
     >
-      <Text
-      // className='text-base text-gray-100 font-pmedium'
-      >
+      <Text style={[{ fontFamily: 'Poppins-Medium', fontSize: 16 }, textStyle]}>
         {title}
       </Text>
 
       <View
-      // className='border-2 border-gray-400 w-full h-16 px-4 bg-black-100 rounded-2xl focus:border-secondary items-center'
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          borderWidth: 2,
+          borderColor: '#7B7B8B',
+          borderRadius: 10,
+          padding: 4,
+          height: 48,
+          width: '50%',
+        }}
+        // className='border-2 border-gray-400 w-full h-16 px-4 bg-black-100 rounded-2xl focus:border-secondary items-center'
       >
         <TextInput
-          // className='flex-1 text-white font-psemibold text-base'
+          style={[
+            { flex: 1, fontFamily: 'Poppins-SemiBold', fontSize: 16 },
+            textStyle,
+          ]}
           value={value}
           placeholder={placeholder}
           placeholderTextColor='#7B7B8B'

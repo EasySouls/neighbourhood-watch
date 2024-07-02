@@ -31,9 +31,6 @@ export const unstable_settings = {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-// Configure Axios for API requests.
-initAxios();
-
 export default function RootLayout() {
   useOnlineManager();
 
@@ -47,6 +44,11 @@ export default function RootLayout() {
     'Poppins-Thin': require('../assets/fonts/Poppins-Thin.ttf'),
     ...FontAwesome.font,
   });
+
+  // Configure Axios for API requests for the backend.
+  useEffect(() => {
+    initAxios();
+  }, []);
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {

@@ -2,7 +2,9 @@ import { QueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 export const initAxios = () => {
-  axios.defaults.baseURL = process.env.BACKEND_URL;
+  axios.defaults.baseURL = process.env.EXPO_PUBLIC_BACKEND_URL;
+  axios.defaults.headers.common['Content-Type'] = 'application/json';
+  axios.defaults.headers.common['Accept'] = 'application/json';
 
   // Add a request interceptor if needed
 

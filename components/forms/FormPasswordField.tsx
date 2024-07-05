@@ -37,7 +37,7 @@ const FormPasswordField = ({
       style={[
         style,
         {
-          /* space-y-2 */
+          gap: 8,
         },
       ]}
     >
@@ -47,14 +47,15 @@ const FormPasswordField = ({
 
       <View
         style={{
+          display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
+          justifyContent: 'center',
           borderWidth: 2,
           borderColor: '#7B7B8B',
           borderRadius: 10,
           padding: 12,
           height: 48,
-          width: '50%',
         }}
         // className='flex border-2 border-gray-400 w-full h-16 px-4 bg-black-100 rounded-2xl focus:border-secondary items-center'
       >
@@ -73,7 +74,7 @@ const FormPasswordField = ({
 
         <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
           <FontAwesome
-            name={showPassword ? 'eye' : 'assistive-listening-systems'}
+            name={showPassword ? 'eye-slash' : 'eye'}
             size={24}
             color='#7B7B8B'
           />

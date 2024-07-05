@@ -46,6 +46,7 @@ export default function LoginScreen() {
     if (res?.error) {
       console.log('Error logging in: ', res.error);
       showToast('Hibás email vagy jelszó. Kérlek próbáld újra.');
+      setLoading(false);
       return;
     }
 
@@ -184,9 +185,6 @@ const styles = StyleSheet.create({
     padding: 12,
     width: '100%',
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignContent: 'center',
   },
   buttonContainer: {
     backgroundColor: '#0070f3',

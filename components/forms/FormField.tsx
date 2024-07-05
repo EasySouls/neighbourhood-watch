@@ -33,7 +33,7 @@ const FormField = ({
       style={[
         style,
         {
-          /* space-y-2 */
+          gap: 8,
         },
       ]}
     >
@@ -43,20 +43,26 @@ const FormField = ({
 
       <View
         style={{
-          flexDirection: 'row',
+          display: 'flex',
           alignItems: 'center',
+          justifyContent: 'center',
           borderWidth: 2,
           borderColor: '#7B7B8B',
           borderRadius: 10,
           padding: 4,
           height: 48,
-          width: '50%',
         }}
         // className='border-2 border-gray-400 w-full h-16 px-4 bg-black-100 rounded-2xl focus:border-secondary items-center'
       >
         <TextInput
           style={[
-            { flex: 1, fontFamily: 'Poppins-SemiBold', fontSize: 16 },
+            {
+              flex: 1,
+              fontFamily: 'Poppins-SemiBold',
+              fontSize: 16,
+              width: '100%',
+              textAlignVertical: 'center',
+            },
             textStyle,
           ]}
           value={value}

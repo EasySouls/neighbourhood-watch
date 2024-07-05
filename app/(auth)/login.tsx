@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import {
-  Alert,
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
   Image,
+  Platform,
 } from 'react-native';
-import { Link, router } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Link, useRouter } from 'expo-router';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import FormField from '../../components/forms/FormField';
 import FormPasswordField from '../../components/forms/FormPasswordField';
 import { StatusBar } from 'expo-status-bar';
@@ -17,6 +20,8 @@ import * as Google from 'expo-auth-session/providers/google';
 import { showToast } from '../../lib/toast';
 import axios from 'axios';
 import LocalStore, { USER_KEY } from '../../lib/store';
+import { useAuth } from '../../context/AuthContext';
+import { useColorScheme } from '../../components/useColorScheme';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -25,6 +30,9 @@ export default function LoginScreen() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
 
+  const { onLogin } = useAuth();
+  const router = useRouter();
+
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_ANDROID_DEV,
     webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_WEB_DEV,
@@ -32,21 +40,23 @@ export default function LoginScreen() {
 
   async function signInWithEmail() {
     setLoading(true);
-    const error = { message: 'Auth not implemented' };
+    const res = await onLogin?.(form.email, form.password);
+    console.log('login result: ', res);
 
-    if (error) {
-      showToast(error.message);
-    }
-    if (!error) {
-      router.replace('/');
+    if (res?.error) {
+      console.log('Error logging in: ', res.error);
+      showToast('Hibás email vagy jelszó. Kérlek próbáld újra.');
+      setLoading(false);
+      return;
     }
 
     setLoading(false);
+    router.replace('/(app)/');
   }
 
   async function signInWithGoogle() {
     setLoading(true);
-    const user = await LocalStore.getItem(USER_KEY);
+    const user = await LocalStore.getItemAsync(USER_KEY);
     if (user) {
       setUserInfo(JSON.parse(user));
       showToast('Már be vagy jelentkezve!');
@@ -67,7 +77,7 @@ export default function LoginScreen() {
       });
 
       const user = res.data;
-      await LocalStore.setItem(USER_KEY, JSON.stringify(user));
+      await LocalStore.setItemAsync(USER_KEY, JSON.stringify(user));
       setUserInfo(user);
     } catch (error) {
       console.error('Error getting user info: ', error);
@@ -79,74 +89,91 @@ export default function LoginScreen() {
     signInWithGoogle();
   }, [response]);
 
+  // Warm up the browser on android before using it
   React.useEffect(() => {
-    WebBrowser.warmUpAsync();
+    if (Platform.OS == 'android') {
+      WebBrowser.warmUpAsync();
 
-    return () => {
-      WebBrowser.coolDownAsync();
-    };
+      return () => {
+        WebBrowser.coolDownAsync();
+      };
+    }
   }, []);
 
+  const colorScheme = useColorScheme();
+  const textStyle =
+    colorScheme === 'dark' ? styles.darkThemeText : styles.lightThemeText;
+  const buttonTextStyle =
+    colorScheme === 'dark' ? styles.darkThemeText : styles.lightThemeText;
+  const loginTextStyle =
+    colorScheme === 'dark' ? styles.lightThemeText : styles.darkThemeText;
+  const signupLinkStyle =
+    colorScheme === 'dark'
+      ? { color: 'white', textDecorationColor: 'white' }
+      : { color: 'black', textDecorationColor: 'black' };
+
+  const insets = useSafeAreaInsets();
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView>
       {userInfo ? (
         <Image
           source={{ uri: userInfo.picture }}
           style={{ width: 100, height: 100, borderRadius: 50 }}
         />
       ) : null}
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <FormField
-          title='Email'
-          value={form.email}
-          placeholder='example@email.com'
-          onChangeText={(text) => setForm({ ...form, email: text })}
-          styles={{ marginTop: 12 }}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <FormPasswordField
-          title='Jelszó'
-          value={form.password}
-          placeholder='super-secret-password'
-          onChangeText={(text) => setForm({ ...form, password: text })}
-          styles={{ marginTop: 12 }}
-        />
-      </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <TouchableOpacity
-          disabled={loading}
-          style={styles.buttonContainer}
-          onPress={() => signInWithEmail()}
-        >
-          <Text style={styles.buttonText}>BELÉPÉS</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <TouchableOpacity
-          disabled={loading}
-          style={styles.googleButtonContainer}
-          onPress={() => promptAsync()}
-        >
-          <Text style={styles.googleButtonText}>BELÉPÉS GOOGLE FIÓKKAL</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={[styles.verticallySpaced, { marginTop: 12 }]}>
-        <Text style={{ color: 'white', marginLeft: 8 }}>
-          Nem vagy még regisztrálva?
-        </Text>
-        <Link
-          href={'/(auth)/signup'}
-          style={{
-            fontWeight: 'bold',
-            color: 'white',
-            marginLeft: 8,
-            textDecorationLine: 'underline',
-            textDecorationColor: 'white',
-          }}
-        >
-          Regisztráció
-        </Link>
+      <View style={[styles.container, { marginTop: insets.top }]}>
+        <View style={[styles.verticallySpaced, styles.mt20]}>
+          <FormField
+            title='Email'
+            value={form.email}
+            placeholder='example@email.com'
+            onChangeText={(text) => setForm({ ...form, email: text })}
+            style={[{ marginTop: 12 }, styles.verticallySpaced]}
+            textStyle={textStyle}
+          />
+        </View>
+        <View style={styles.verticallySpaced}>
+          <FormPasswordField
+            title='Jelszó'
+            value={form.password}
+            placeholder='super-secret-password'
+            onChangeText={(text) => setForm({ ...form, password: text })}
+            style={[{ marginTop: 12 }, styles.verticallySpaced]}
+            textStyle={textStyle}
+          />
+        </View>
+        <View style={[styles.verticallySpaced, styles.mt20, { width: '40%' }]}>
+          <TouchableOpacity
+            disabled={loading}
+            style={styles.buttonContainer}
+            onPress={() => signInWithEmail()}
+          >
+            <Text style={[styles.buttonText, loginTextStyle]}>BELÉPÉS</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.verticallySpaced, styles.mt20, { width: '40%' }]}>
+          <TouchableOpacity
+            disabled={loading}
+            style={styles.googleButtonContainer}
+            onPress={() => promptAsync()}
+          >
+            <Text style={[styles.googleButtonText, buttonTextStyle]}>
+              BELÉPÉS GOOGLE FIÓKKAL
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.verticallySpaced, { marginTop: 12 }]}>
+          <Text style={[{ marginLeft: 8 }, textStyle]}>
+            Nem vagy még regisztrálva?
+          </Text>
+          <Link
+            href={'/(auth)/signup'}
+            style={[styles.signupLink, signupLinkStyle]}
+          >
+            Regisztráció
+          </Link>
+        </View>
       </View>
       <StatusBar style='auto' />
     </SafeAreaView>
@@ -155,8 +182,9 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
     padding: 12,
+    width: '100%',
+    display: 'flex',
   },
   buttonContainer: {
     backgroundColor: '#0070f3',
@@ -172,10 +200,20 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
-    color: '#fff',
     fontWeight: 'bold',
     alignSelf: 'center',
     textTransform: 'uppercase',
+  },
+  lightThemeText: {
+    color: 'black',
+  },
+  darkThemeText: {
+    color: 'white',
+  },
+  signupLink: {
+    fontWeight: 'bold',
+    marginLeft: 8,
+    textDecorationLine: 'underline',
   },
   googleButtonText: {
     fontSize: 18,

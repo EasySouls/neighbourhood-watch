@@ -26,3 +26,28 @@ export interface Profile {
   pumpsz: number;
   updated_at: string;
 }
+
+export enum Role {
+  ADMIN = 'Admin',
+  DEP_HEAD = 'DEP_HEAD',
+  CIVIL_GUARD = 'CivilGuard',
+}
+
+export interface Account {
+  id: string;
+  name: string;
+  email: string;
+  role: Role;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface CodeConfirmResponse {
+  isValid: boolean;
+  name: string | null;
+}
+
+export interface SignUpResponse {
+  error: string | null;
+  account: Account | null;
+}

@@ -9,33 +9,122 @@ import {
 import { showToast } from '../../lib/toast';
 import { StatusBar } from 'expo-status-bar';
 import FormField from '../../components/forms/FormField';
+import { useAuth } from '../../context/AuthContext';
+import { useColorScheme } from '../../components/useColorScheme';
+import { Link } from 'expo-router';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
+import FormPasswordField from '../../components/forms/FormPasswordField';
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const [isValidCode, setIsValidCode] = useState(false);
+  const [form, setForm] = useState({ password: '', passwordAgain: '' });
+
+  const { onCodeConfirmSent, onSignUp } = useAuth();
+
   async function signUpWithCode() {
     setLoading(true);
-    const error = { message: 'Auth not implemented' };
 
-    setTimeout(() => {}, 1000);
+    const codeAsNum = Number(code);
 
-    if (error) {
-      showToast(error.message);
+    const res = await onCodeConfirmSent?.(email, codeAsNum);
+    console.log(res);
+
+    if (!res?.isValid) {
+      showToast('Hibás kód vagy email cím. Kérlek próbáld újra.');
     } else {
-      showToast('Sign up successful! Please log in.');
+      setIsValidCode(true);
     }
 
     setLoading(false);
   }
 
+  async function signUp() {
+    setLoading(true);
+
+    if (form.password !== form.passwordAgain) {
+      showToast('A két jelszó nem egyezik.');
+      setLoading(false);
+      return;
+    }
+
+    const codeAsNum = Number(code);
+    const res = await onSignUp?.(email, form.password, codeAsNum);
+    console.log(res);
+
+    if (res?.error) {
+      showToast('Hiba történt a regisztráció során.');
+      return;
+    }
+
+    showToast(
+      `Sikeres regisztráció ${res?.account?.name} néven! Most már bejelentkezhetsz.`
+    );
+
+    setLoading(false);
+  }
+
+  const insets = useSafeAreaInsets();
+  const colorScheme = useColorScheme();
+
+  const textStyle =
+    colorScheme === 'dark' ? styles.darkThemeText : styles.lightThemeText;
+  const buttonTextStyle =
+    colorScheme === 'dark' ? styles.darkThemeText : styles.lightThemeText;
+  const registerTextStyle =
+    colorScheme === 'dark' ? styles.lightThemeText : styles.darkThemeText;
+
+  if (isValidCode) {
+    return (
+      <View style={[styles.container, { marginTop: insets.top }]}>
+        <View style={[styles.verticallySpaced, styles.mt20]}>
+          <FormPasswordField
+            title='Jelszó'
+            value={form.password}
+            placeholder='********'
+            onChangeText={(text) => setForm({ ...form, password: text })}
+            style={[{ marginTop: 12 }, styles.verticallySpaced]}
+            textStyle={textStyle}
+          />
+        </View>
+        <View style={styles.verticallySpaced}>
+          <FormPasswordField
+            title='Jelszó megerősítése'
+            value={form.passwordAgain}
+            placeholder='super-secret-password'
+            onChangeText={(text) => setForm({ ...form, passwordAgain: text })}
+            style={[{ marginTop: 12 }, styles.verticallySpaced]}
+            textStyle={textStyle}
+          />
+        </View>
+        <View style={[styles.verticallySpaced, styles.mt20, { width: '40%' }]}>
+          <TouchableOpacity
+            disabled={loading}
+            style={styles.buttonContainer}
+            onPress={() => signUp()}
+          >
+            <Text style={[styles.buttonText, registerTextStyle]}>
+              REGISZTRÁCIÓ
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text
         style={[
           styles.verticallySpaced,
-          { color: 'white', fontSize: 24, marginTop: 20, marginBottom: 20 },
+          textStyle,
+          { fontSize: 24, marginTop: 20, marginBottom: 20 },
         ]}
       >
         Lépj be az email címeddel és a kapott kóddal
@@ -45,14 +134,16 @@ export default function SignUpScreen() {
         value={code}
         onChangeText={(e) => setCode(e)}
         placeholder='******'
-        styles={{ marginTop: 12 }}
+        style={[{ marginTop: 12 }, styles.verticallySpaced]}
+        textStyle={textStyle}
       />
       <FormField
         title='Email'
         value={email}
         onChangeText={(e) => setEmail(e)}
         placeholder='example@gmail.com'
-        styles={{ marginTop: 12 }}
+        style={[{ marginTop: 12 }, styles.verticallySpaced]}
+        textStyle={textStyle}
       />
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <TouchableOpacity
@@ -71,7 +162,7 @@ export default function SignUpScreen() {
         />
       )}
       <StatusBar style='auto' backgroundColor='#161622' />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -94,6 +185,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignSelf: 'center',
     textTransform: 'uppercase',
+  },
+  lightThemeText: {
+    color: 'black',
+  },
+  darkThemeText: {
+    color: 'white',
   },
   verticallySpaced: {
     paddingTop: 4,

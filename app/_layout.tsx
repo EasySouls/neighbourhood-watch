@@ -17,6 +17,9 @@ import { useOnlineManager } from '../hooks/useOnlineManager';
 import { useAppState } from '../hooks/useAppState';
 import { initAxios, queryClient } from '../lib/queryClient';
 import { AuthProvider } from '../context/AuthContext';
+import { TamaguiProvider, createTamagui } from 'tamagui';
+import { config } from '@tamagui/config/v3';
+import tamaguiConfig from '../tamagui.config';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -79,14 +82,18 @@ function RootLayoutNav() {
 
   return (
     <SafeAreaProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name='(app)' options={{ headerShown: false }} />
-          <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
-          <Stack.Screen name='(auth)' options={{ headerShown: false }} />
-          <Stack.Screen name='duties' options={{ headerShown: false }} />
-        </Stack>
-      </ThemeProvider>
+      <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme!}>
+        <ThemeProvider
+          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+        >
+          <Stack>
+            <Stack.Screen name='(app)' options={{ headerShown: false }} />
+            <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
+            <Stack.Screen name='(auth)' options={{ headerShown: false }} />
+            <Stack.Screen name='duties' options={{ headerShown: false }} />
+          </Stack>
+        </ThemeProvider>
+      </TamaguiProvider>
     </SafeAreaProvider>
   );
 }

@@ -11,6 +11,7 @@ import {
 } from '../../lib/duties';
 import ActiveDuties from '../../components/duties/ActiveDuties';
 import { Link } from 'expo-router';
+import { Button } from 'tamagui';
 
 export default function HomeScreen() {
   const departmentId = '5f519f92-1468-4bbb-8e7f-df34e3ce527b';
@@ -47,6 +48,14 @@ export default function HomeScreen() {
       ) : (
         <Text>You are not on duty</Text>
       )}
+      <Button
+        theme='blue'
+        onPress={() => {
+          console.log('Pressed');
+        }}
+      >
+        Hello
+      </Button>
       {activeDuties.data ? (
         <ActiveDuties duties={activeDuties.data} />
       ) : (

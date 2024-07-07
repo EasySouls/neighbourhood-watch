@@ -49,7 +49,7 @@ const FormField = ({
           borderWidth: 2,
           borderColor: '#7B7B8B',
           borderRadius: 10,
-          padding: 4,
+          paddingHorizontal: 12,
           height: 48,
         }}
         // className='border-2 border-gray-400 w-full h-16 px-4 bg-black-100 rounded-2xl focus:border-secondary items-center'

@@ -1,6 +1,4 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
-import { Profile } from '../types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../context/AuthContext';

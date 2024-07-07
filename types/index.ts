@@ -17,14 +17,14 @@ export enum DutyType {
   Other = 'Other',
 }
 
-export interface Profile {
-  created_at: string;
-  email: string;
-  full_name: string;
+export interface CivilGuard {
   id: string;
-  phone: string;
-  pumpsz: number;
-  updated_at: string;
+  name: string;
+  roles: Role[];
+  accountId?: string;
+  departmentId: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export enum Role {

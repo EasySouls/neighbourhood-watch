@@ -12,10 +12,13 @@ import {
 import ActiveDuties from '../../components/duties/ActiveDuties';
 import { Link } from 'expo-router';
 import { Button } from 'tamagui';
+import { useAuth } from '../../context/AuthContext';
 
 export default function HomeScreen() {
-  const departmentId = '5f519f92-1468-4bbb-8e7f-df34e3ce527b';
-  const userId = '5f519f92-1468-4bbb-8e7f-df34e3ce527b';
+  const { authState } = useAuth();
+
+  const id = authState?.civilGuard?.id!;
+  const departmentId = authState?.civilGuard?.departmentId!;
 
   const activeDuties = useQuery({
     queryKey: ['duties', 'active'],
@@ -24,7 +27,7 @@ export default function HomeScreen() {
 
   const ownActiveDuty = useQuery({
     queryKey: ['duties', 'active'],
-    queryFn: () => getOwnActiveDuty(userId, departmentId),
+    queryFn: () => getOwnActiveDuty(id, departmentId),
   });
 
   const stopActiveDutyMutation = useMutation({
@@ -33,11 +36,6 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Link href='/duties/sd/1' asChild>
-        <Pressable>
-          <Text>Szolgálat 1</Text>
-        </Pressable>
-      </Link>
       {ownActiveDuty.data ? (
         <ActiveCurrentPatrol
           duty={ownActiveDuty.data}

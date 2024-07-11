@@ -50,6 +50,10 @@ export default function LoginScreen() {
       return;
     }
 
+    // Need a little bit of delay so the jwt token can be saved
+    // If the user is immediately redirected, the token won't be found
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     setLoading(false);
     router.replace('/(app)/');
   }

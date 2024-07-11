@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
 import LocalStore from '../lib/store';
 import { CivilGuard, CodeConfirmResponse, SignUpResponse } from '../types';
+import { usePathname, useRouter } from 'expo-router';
 
 interface AuthProps {
   authState?: {
@@ -34,6 +35,9 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [authState, setAuthState] = useState<{
     token: string | null;
     authenticated: boolean | null;
@@ -58,6 +62,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           'auth/profile'
         );
         setAuthState({ token, authenticated: true, civilGuard });
+
+        // Redirect to the app if the user is already authenticated
+        router.replace('/(app)/');
       } else {
         setAuthState({ token: null, authenticated: false, civilGuard: null });
       }
@@ -113,6 +120,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         password,
       });
 
+      const token = res.data.access_token;
+
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+      await LocalStore.setItemAsync(TOKEN_KEY, token);
+      console.log('Token:', token);
+
       const { data: civilGuard } = await axios.get<CivilGuard>('auth/profile');
 
       setAuthState({
@@ -120,14 +134,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         authenticated: true,
         civilGuard,
       });
-
-      axios.defaults.headers.common[
-        'Authorization'
-      ] = `Bearer ${res.data.access_token}`;
-
-      console.log('Token:', res.data.access_token);
-
-      await LocalStore.setItemAsync(TOKEN_KEY, res.data.access_token);
 
       return { error: null };
     } catch (e) {

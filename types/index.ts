@@ -27,17 +27,33 @@ export interface CivilGuard {
   updatedAt: Date;
 }
 
+export interface CivilGuardComplete {
+  id: string;
+  name: string;
+  roles: Role[];
+  account: Account;
+  department: Department;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export enum Role {
-  ADMIN = 'Admin',
+  ADMIN = 'ADMIN',
   DEP_HEAD = 'DEP_HEAD',
-  CIVIL_GUARD = 'CivilGuard',
+  CIVIL_GUARD = 'CIVIL_GUARD',
 }
 
 export interface Account {
   id: string;
   name: string;
   email: string;
-  role: Role;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Department {
+  id: string;
+  name: string;
   createdAt: Date;
   updatedAt: Date;
 }

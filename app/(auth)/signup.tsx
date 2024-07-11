@@ -60,6 +60,7 @@ export default function SignUpScreen() {
 
     if (res?.error) {
       showToast('Hiba történt a regisztráció során.');
+      setLoading(false);
       return;
     }
 

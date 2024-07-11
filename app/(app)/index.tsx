@@ -10,7 +10,6 @@ import {
   stopActiveDuty,
 } from '../../lib/duties';
 import ActiveDuties from '../../components/duties/ActiveDuties';
-import { Link } from 'expo-router';
 import { Button } from 'tamagui';
 import { useAuth } from '../../context/AuthContext';
 

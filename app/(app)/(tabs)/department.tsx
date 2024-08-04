@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { H2, Input, Main, Text, YStack } from 'tamagui';
-import { useAuth } from '../../context/AuthContext';
-import { fetchDepartmentInfo } from '../../lib/department';
-import { Container } from '../../tamagui.config';
+import { H2, Input, View, YStack } from 'tamagui';
+import { useAuth } from '../../../context/AuthContext';
+import { fetchDepartmentInfo } from '../../../lib/department';
+import { Container } from '../../../tamagui.config';
+import React from 'react';
 
 export default function DepartmentScreen() {
   const { authState } = useAuth();
@@ -12,12 +13,12 @@ export default function DepartmentScreen() {
   });
 
   return (
-    <Main>
+    <View>
       <Container />
       <YStack>
         <H2>Department Screen</H2>
         <Input placeholder='Polgárőr keresése' />
       </YStack>
-    </Main>
+    </View>
   );
 }

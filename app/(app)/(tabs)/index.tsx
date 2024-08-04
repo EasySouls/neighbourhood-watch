@@ -1,17 +1,17 @@
 import { StyleSheet } from 'react-native';
 
 import { Text, View } from 'react-native';
-import ActiveCurrentPatrol from '../../components/duties/ActiveCurrentPatrol';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { Button } from 'tamagui';
+import { useRouter } from 'expo-router';
+import { useAuth } from '../../../context/AuthContext';
 import {
   getActiveDuties,
   getOwnActiveDuty,
   stopActiveDuty,
-} from '../../lib/duties';
-import ActiveDuties from '../../components/duties/ActiveDuties';
-import { Button } from 'tamagui';
-import { useAuth } from '../../context/AuthContext';
-import { useRouter } from 'expo-router';
+} from '../../../lib/duties';
+import ActiveCurrentPatrol from '../../../components/duties/ActiveCurrentPatrol';
+import ActiveDuties from '../../../components/duties/ActiveDuties';
 
 export default function HomeScreen() {
   const { authState } = useAuth();

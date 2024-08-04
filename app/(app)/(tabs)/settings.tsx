@@ -1,9 +1,9 @@
 import { Text, View } from 'react-native';
-import { useAuth } from '../../context/AuthContext';
 import { useQuery } from '@tanstack/react-query';
-import { getCivilGuardComplete } from '../../lib/civilGuards';
 import { Suspense } from 'react';
-import CivilGuardInfo from '../../components/civilGuard/CivilGuardInfo';
+import { getCivilGuardComplete } from '../../../lib/civilGuards';
+import { useAuth } from '../../../context/AuthContext';
+import CivilGuardInfo from '../../../components/civilGuard/CivilGuardInfo';
 
 export default function SettingsPage() {
   const { authState } = useAuth();

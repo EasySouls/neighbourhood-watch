@@ -89,7 +89,6 @@ function RootLayoutNav() {
             <Stack.Screen name='(app)' options={{ headerShown: false }} />
             <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
             <Stack.Screen name='(auth)' options={{ headerShown: false }} />
-            <Stack.Screen name='duties' options={{ headerShown: false }} />
           </Stack>
         </ThemeProvider>
       </TamaguiProvider>

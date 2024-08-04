@@ -110,6 +110,20 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
+          name='department'
+          options={{
+            title: 'Osztály',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                iconName='building'
+                color={color}
+                name='Osztály'
+                focused={focused}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
           name='settings'
           options={{
             title: 'Beállítások',

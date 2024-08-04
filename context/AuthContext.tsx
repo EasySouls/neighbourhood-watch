@@ -1,10 +1,15 @@
 import axios, { AxiosError } from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
 import LocalStore from '../lib/store';
-import { CodeConfirmResponse, SignUpResponse } from '../types';
+import { CivilGuard, CodeConfirmResponse, SignUpResponse } from '../types';
+import { usePathname, useRouter } from 'expo-router';
 
 interface AuthProps {
-  authState?: { token: string | null; authenticated: boolean | null };
+  authState?: {
+    token: string | null;
+    authenticated: boolean | null;
+    civilGuard: CivilGuard | null;
+  };
   onCodeConfirmSent?: (
     email: string,
     code: number
@@ -30,12 +35,17 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [authState, setAuthState] = useState<{
     token: string | null;
     authenticated: boolean | null;
+    civilGuard: CivilGuard | null;
   }>({
     token: null,
     authenticated: null,
+    civilGuard: null,
   });
 
   // Load the token from storage on initialization
@@ -44,10 +54,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const token = await LocalStore.getItemAsync(TOKEN_KEY);
 
       if (token) {
-        setAuthState({ token, authenticated: true });
+        // Set the token in axios headers so that it is sent with every request
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        // Retrieve the current user based on the token
+        const { data: civilGuard } = await axios.get<CivilGuard>(
+          'auth/profile'
+        );
+        setAuthState({ token, authenticated: true, civilGuard });
+
+        // Redirect to the app if the user is already authenticated
+        router.replace('/(app)/');
       } else {
-        setAuthState({ token: null, authenticated: false });
+        setAuthState({ token: null, authenticated: false, civilGuard: null });
       }
     };
 
@@ -101,15 +120,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         password,
       });
 
-      setAuthState({ token: res.data.access_token, authenticated: true });
+      const token = res.data.access_token;
 
-      axios.defaults.headers.common[
-        'Authorization'
-      ] = `Bearer ${res.data.access_token}`;
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-      console.log('Token:', res.data.access_token);
+      await LocalStore.setItemAsync(TOKEN_KEY, token);
+      console.log('Token:', token);
 
-      await LocalStore.setItemAsync(TOKEN_KEY, res.data.access_token);
+      const { data: civilGuard } = await axios.get<CivilGuard>('auth/profile');
+
+      setAuthState({
+        token: res.data.access_token,
+        authenticated: true,
+        civilGuard,
+      });
 
       return { error: null };
     } catch (e) {
@@ -126,7 +150,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // Remove token from storage
       await LocalStore.setItemAsync(TOKEN_KEY, null);
 
-      setAuthState({ token: null, authenticated: false });
+      setAuthState({ token: null, authenticated: false, civilGuard: null });
 
       // Remove token from axios headers
       axios.defaults.headers.common['Authorization'] = `Bearer null`;

@@ -17,8 +17,7 @@ import { useOnlineManager } from '../hooks/useOnlineManager';
 import { useAppState } from '../hooks/useAppState';
 import { initAxios, queryClient } from '../lib/queryClient';
 import { AuthProvider } from '../context/AuthContext';
-import { TamaguiProvider, createTamagui } from 'tamagui';
-import { config } from '@tamagui/config/v3';
+import { TamaguiProvider } from 'tamagui';
 import tamaguiConfig from '../tamagui.config';
 
 export {

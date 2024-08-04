@@ -1,8 +1,7 @@
-import { Pressable, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { Text, View } from 'react-native';
 import ActiveCurrentPatrol from '../../components/duties/ActiveCurrentPatrol';
-import { Duty, DutyType } from '../../types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   getActiveDuties,
@@ -12,9 +11,11 @@ import {
 import ActiveDuties from '../../components/duties/ActiveDuties';
 import { Button } from 'tamagui';
 import { useAuth } from '../../context/AuthContext';
+import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
   const { authState } = useAuth();
+  const router = useRouter();
 
   const id = authState?.civilGuard?.id!;
   const departmentId = authState?.civilGuard?.departmentId!;
@@ -30,6 +31,7 @@ export default function HomeScreen() {
   });
 
   const stopActiveDutyMutation = useMutation({
+    mutationKey: ['duties', 'active'],
     mutationFn: (dutyId: string) => stopActiveDuty(dutyId),
   });
 
@@ -48,15 +50,15 @@ export default function HomeScreen() {
       <Button
         theme='blue'
         onPress={() => {
-          console.log('Pressed');
+          router.push('/duties/create');
         }}
       >
-        Hello
+        Új szolgálat
       </Button>
       {activeDuties.data ? (
         <ActiveDuties duties={activeDuties.data} />
       ) : (
-        <Text>There are no active duties</Text>
+        <Text>Nincsenek aktív szolgálatok</Text>
       )}
     </View>
   );

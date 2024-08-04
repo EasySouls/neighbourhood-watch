@@ -7,14 +7,22 @@ export interface Duty {
   plate_num: string;
   started_at: string;
   type: DutyType;
-  user_id: string | null;
+  userId: string | null;
+}
+
+// The creating Civil Guard's id is not required, since it will be read from the jwt token
+export interface CreateDuty {
+  name: string;
+  description?: string;
+  plateNumber: string;
+  type: DutyType;
 }
 
 export enum DutyType {
-  Patrol = 'Patrol',
-  Traffic = 'Traffic',
-  Desk = 'Desk',
-  Other = 'Other',
+  PATROL = 'Patrol',
+  TRAFFIC = 'Traffic',
+  DESK = 'Desk',
+  OTHER = 'Other',
 }
 
 export interface CivilGuard {

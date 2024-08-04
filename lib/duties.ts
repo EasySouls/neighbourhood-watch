@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Duty } from '../types';
+import { CreateDuty, Duty, DutyType } from '../types';
 
 export async function getActiveDuties(departmentId: string): Promise<Duty[]> {
   const res = await axios.get(`/duties/department/${departmentId}/active`);
@@ -15,7 +15,11 @@ export async function getOwnActiveDuty(
     `/duties/department/${departmentId}/active`
   );
   const duties = res.data;
-  return duties.find((duty) => duty.user_id === userId) || null;
+  return duties.find((duty) => duty.userId === userId) || null;
+}
+
+export async function startDuty(createDutyReq: CreateDuty) {
+  await axios.post(`/duties`, createDutyReq);
 }
 
 export async function stopActiveDuty(dutyId: string) {

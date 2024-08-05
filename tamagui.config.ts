@@ -29,12 +29,12 @@ export const Container = styled(YStack, {
 
 // Maybe create a custom Tamagui configuration later
 
-export const tamaguiConfig = createTamagui(config);
-
-export default tamaguiConfig;
+const tamaguiConfig = createTamagui(config);
 
 export type Conf = typeof tamaguiConfig;
 
 declare module 'tamagui' {
   interface TamaguiCustomConfig extends Conf {}
 }
+
+export default tamaguiConfig;

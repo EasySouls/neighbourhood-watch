@@ -19,10 +19,11 @@ export interface CreateDuty {
 }
 
 export enum DutyType {
-  PATROL = 'Patrol',
-  TRAFFIC = 'Traffic',
-  DESK = 'Desk',
-  OTHER = 'Other',
+  PATROL = 'PATROL',
+  TRAFFIC = 'TRAFFIC',
+  DESK = 'DESK',
+  EVENT = 'EVENT',
+  OTHER = 'OTHER',
 }
 
 export interface CivilGuard {

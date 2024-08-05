@@ -25,10 +25,10 @@ export {
   ErrorBoundary,
 } from 'expo-router';
 
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
-};
+// export const unstable_settings = {
+//   // Ensure that reloading on `/modal` keeps a back button present.
+//   initialRouteName: '(tabs)',
+// };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -67,31 +67,31 @@ export default function RootLayout() {
     return null;
   }
 
+  const colorScheme = useColorScheme();
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <RootLayoutNav />
+        <ThemeProvider
+          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+        >
+          <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme!}>
+            <RootLayoutNav />
+          </TamaguiProvider>
+        </ThemeProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-
   return (
     <SafeAreaProvider>
-      <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme!}>
-        <ThemeProvider
-          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-        >
-          <Stack>
-            <Stack.Screen name='(app)' options={{ headerShown: false }} />
-            <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
-            <Stack.Screen name='(auth)' options={{ headerShown: false }} />
-          </Stack>
-        </ThemeProvider>
-      </TamaguiProvider>
+      <Stack>
+        <Stack.Screen name='(app)' options={{ headerShown: false }} />
+        <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
+        <Stack.Screen name='(auth)' options={{ headerShown: false }} />
+      </Stack>
     </SafeAreaProvider>
   );
 }

@@ -29133,8 +29133,7 @@ var require_cjs22 = __commonJS({
 var tamagui_config_exports = {};
 __export(tamagui_config_exports, {
   Container: () => Container,
-  default: () => tamagui_config_default,
-  tamaguiConfig: () => tamaguiConfig
+  default: () => tamagui_config_default
 });
 module.exports = __toCommonJS(tamagui_config_exports);
 
@@ -48659,8 +48658,7 @@ var tamaguiConfig = createTamagui(config);
 var tamagui_config_default = tamaguiConfig;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  Container,
-  tamaguiConfig
+  Container
 });
 /*! Bundled license information:
 

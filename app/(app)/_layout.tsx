@@ -9,7 +9,12 @@ const AuthenticatedLayout = () => {
     return <Redirect href='/(auth)/login' />;
   }
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='(tabs)' />
+      <Stack.Screen name='duties' />
+    </Stack>
+  );
 };
 
 export default AuthenticatedLayout;

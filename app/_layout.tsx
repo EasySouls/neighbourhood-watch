@@ -34,9 +34,9 @@ export {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  useOnlineManager();
+  // useOnlineManager();
 
-  useAppState(onAppStateChange);
+  // useAppState(onAppStateChange);
 
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -52,22 +52,23 @@ export default function RootLayout() {
     initAxios();
   }, []);
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
-
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
 
+  const colorScheme = useColorScheme();
+
+  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
+  // Keep this piece of code above the return statements, to avoid 'Rendered more hooks than during the previous render' error.
+  useEffect(() => {
+    if (error) throw error;
+  }, [error]);
+
   if (!loaded && !error) {
     return null;
   }
-
-  const colorScheme = useColorScheme();
 
   return (
     <QueryClientProvider client={queryClient}>

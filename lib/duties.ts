@@ -1,18 +1,18 @@
 import axios from 'axios';
-import { CreateDuty, Duty, DutyType } from '../types';
+import { CreateDuty, Duty } from '../types';
 
-export async function getActiveDuties(departmentId: string): Promise<Duty[]> {
+export async function fetchActiveDuties(departmentId: string): Promise<Duty[]> {
   try {
     const res = await axios.get(`/duties/department/${departmentId}/active`);
     return res.data;
   } catch (error) {
-    console.log('🚀 ~ getActiveDuties ~ error:', error);
+    console.error('🚀 ~ getActiveDuties ~ error:', error);
     return [];
   }
 }
 
 // TODO - implement an api endpoint for this
-export async function getOwnActiveDuty(
+export async function fetchOwnActiveDuty(
   userId: string,
   departmentId: string
 ): Promise<Duty | null> {
@@ -23,7 +23,7 @@ export async function getOwnActiveDuty(
     const duties = res.data;
     return duties.find((duty) => duty.userId === userId) || null;
   } catch (error) {
-    console.log('🚀 ~ getOwnActiveDuty ~ error:', error);
+    console.error('🚀 ~ getOwnActiveDuty ~ error:', error);
     return null;
   }
 }
@@ -33,7 +33,7 @@ export async function startDuty(createDutyReq: CreateDuty) {
   try {
     await axios.post(`/duties`, createDutyReq);
   } catch (error) {
-    console.log('🚀 ~ startDuty ~ error:', error);
+    console.error('🚀 ~ startDuty ~ error:', error);
   }
 }
 
@@ -41,6 +41,16 @@ export async function stopActiveDuty(dutyId: string) {
   try {
     await axios.post(`/duties/${dutyId}`);
   } catch (error) {
-    console.log('🚀 ~ stopActiveDuty ~ error:', error);
+    console.error('🚀 ~ stopActiveDuty ~ error:', error);
+  }
+}
+
+export async function fetchDuty(dutyId: string): Promise<Duty | null> {
+  try {
+    const duty = await axios.get(`duties/${dutyId}`);
+    return duty.data;
+  } catch (error) {
+    console.error('🚀 ~ stopActiveDuty ~ error:', error);
+    return null;
   }
 }

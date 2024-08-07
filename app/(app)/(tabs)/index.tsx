@@ -6,8 +6,8 @@ import { Button } from 'tamagui';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../../context/AuthContext';
 import {
-  getActiveDuties,
-  getOwnActiveDuty,
+  fetchActiveDuties,
+  fetchOwnActiveDuty,
   stopActiveDuty,
 } from '../../../lib/duties';
 import ActiveCurrentPatrol from '../../../components/duties/ActiveCurrentPatrol';
@@ -22,12 +22,12 @@ export default function HomeScreen() {
 
   const activeDuties = useQuery({
     queryKey: ['duties', 'active'],
-    queryFn: () => getActiveDuties(departmentId),
+    queryFn: () => fetchActiveDuties(departmentId),
   });
 
   const ownActiveDuty = useQuery({
-    queryKey: ['duties', 'active'],
-    queryFn: () => getOwnActiveDuty(id, departmentId),
+    queryKey: ['duties', 'active', id],
+    queryFn: () => fetchOwnActiveDuty(id, departmentId),
   });
 
   const stopActiveDutyMutation = useMutation({
@@ -50,7 +50,7 @@ export default function HomeScreen() {
       <Button
         theme='blue'
         onPress={() => {
-          router.push('/duties/create');
+          router.push('/duties');
         }}
       >
         Új szolgálat

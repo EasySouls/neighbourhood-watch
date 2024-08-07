@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { CreateDuty, DutyType } from '../../../types';
-import { getOwnActiveDuty, startDuty } from '../../../lib/duties';
+import { fetchOwnActiveDuty, startDuty } from '../../../lib/duties';
 import {
   Button,
   Input,
@@ -44,7 +44,7 @@ export default function CreateDutyScreen() {
 
   useEffect(() => {
     async function isThereActiveDuty() {
-      const activeDuty = await getOwnActiveDuty(
+      const activeDuty = await fetchOwnActiveDuty(
         authState?.civilGuard?.id!,
         authState?.civilGuard?.departmentId!
       );

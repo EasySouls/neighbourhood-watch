@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import LocalStore from '../lib/store';
 import { CivilGuard, CodeConfirmResponse, SignUpResponse } from '../types';
 import { usePathname, useRouter } from 'expo-router';
+import { showToast } from 'lib/toast';
 
 interface AuthProps {
   authState?: {
@@ -57,14 +58,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         // Set the token in axios headers so that it is sent with every request
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-        // Retrieve the current user based on the token
-        const { data: civilGuard } = await axios.get<CivilGuard>(
-          'auth/profile'
-        );
-        setAuthState({ token, authenticated: true, civilGuard });
-
-        // Redirect to the app if the user is already authenticated
-        router.replace('/(app)/');
+        try {
+          // Retrieve the current user based on the token
+          const { data: civilGuard } = await axios.get<CivilGuard>(
+            'auth/profile'
+          );
+          setAuthState({ token, authenticated: true, civilGuard });
+          // Redirect to the app if the user is already authenticated
+          router.replace('/(app)');
+        } catch (error) {
+          if (error instanceof AxiosError) {
+            showToast('Check your internet connection');
+          }
+          setAuthState({ token: null, authenticated: false, civilGuard: null });
+        }
       } else {
         setAuthState({ token: null, authenticated: false, civilGuard: null });
       }

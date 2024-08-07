@@ -1,11 +1,6 @@
-import {
-  View,
-  Text,
-  TextInput,
-  StyleProp,
-  ViewStyle,
-  TextStyle,
-} from 'react-native';
+import { StyleProp, ViewStyle, TextStyle } from 'react-native';
+import React from 'react';
+import { Input, Paragraph, View } from 'tamagui';
 
 type FormFieldProps = {
   title: string;
@@ -37,9 +32,11 @@ const FormField = ({
         },
       ]}
     >
-      <Text style={[{ fontFamily: 'Poppins-Medium', fontSize: 16 }, textStyle]}>
+      <Paragraph
+        style={[{ fontFamily: 'Poppins-Medium', fontSize: 16 }, textStyle]}
+      >
         {title}
-      </Text>
+      </Paragraph>
 
       <View
         style={{
@@ -54,7 +51,7 @@ const FormField = ({
         }}
         // className='border-2 border-gray-400 w-full h-16 px-4 bg-black-100 rounded-2xl focus:border-secondary items-center'
       >
-        <TextInput
+        <Input
           style={[
             {
               flex: 1,

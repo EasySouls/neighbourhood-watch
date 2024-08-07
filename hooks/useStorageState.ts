@@ -1,5 +1,4 @@
 import React from 'react';
-import { Platform } from 'react-native';
 import LocalStore, { StoreKey } from '../lib/store';
 
 type UseStateHook<T> = [[boolean, T | null], (value: T | null) => void];

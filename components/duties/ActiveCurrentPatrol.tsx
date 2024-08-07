@@ -2,6 +2,7 @@ import { View, Text, Paragraph, Button } from 'tamagui';
 import { dutyTypeToString } from '../../lib/utils';
 import { Duty } from '../../types';
 import { Link } from 'expo-router';
+import React from 'react';
 
 interface ActiveCurrentPatrolProps {
   duty: Duty;

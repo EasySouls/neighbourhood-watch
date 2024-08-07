@@ -19,6 +19,7 @@ import { initAxios, queryClient } from '../lib/queryClient';
 import { AuthProvider } from '../context/AuthContext';
 import { TamaguiProvider } from 'tamagui';
 import tamaguiConfig from '../tamagui.config';
+import React from 'react';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -34,9 +35,9 @@ export {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  // useOnlineManager();
+  useOnlineManager();
 
-  // useAppState(onAppStateChange);
+  useAppState(onAppStateChange);
 
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -59,6 +60,8 @@ export default function RootLayout() {
   }, [loaded]);
 
   const colorScheme = useColorScheme();
+
+  const hello = 'asd';
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   // Keep this piece of code above the return statements, to avoid 'Rendered more hooks than during the previous render' error.

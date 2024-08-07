@@ -1,5 +1,6 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, View, Pressable, Text } from 'react-native';
+import React from 'react';
 
 type ButtonProps = {
   label: string;

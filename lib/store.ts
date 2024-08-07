@@ -1,5 +1,4 @@
 import { Platform } from 'react-native';
-import * as React from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { TOKEN_KEY } from '../context/AuthContext';
 

@@ -1,5 +1,6 @@
-import { Text, View, XStack } from 'tamagui';
+import { Text, View } from 'tamagui';
 import { CivilGuardComplete } from '../../types';
+import React from 'react';
 
 interface CivilGuardInfoProps {
   civilGuard: CivilGuardComplete;

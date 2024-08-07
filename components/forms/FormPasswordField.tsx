@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
   TouchableOpacity,
   StyleProp,
   ViewStyle,
   TextStyle,
 } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import React from 'react';
+import { Input, Paragraph, View } from 'tamagui';
 
 type FormFieldProps = {
   title: string;
@@ -41,9 +40,11 @@ const FormPasswordField = ({
         },
       ]}
     >
-      <Text style={[{ fontFamily: 'Poppins-Medium', fontSize: 16 }, textStyle]}>
+      <Paragraph
+        style={[{ fontFamily: 'Poppins-Medium', fontSize: 16 }, textStyle]}
+      >
         {title}
-      </Text>
+      </Paragraph>
 
       <View
         style={{
@@ -59,7 +60,7 @@ const FormPasswordField = ({
         }}
         // className='flex border-2 border-gray-400 w-full h-16 px-4 bg-black-100 rounded-2xl focus:border-secondary items-center'
       >
-        <TextInput
+        <Input
           style={[
             { flex: 1, fontFamily: 'Poppins-SemiBold', fontSize: 16 },
             textStyle,

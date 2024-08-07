@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { IconProps } from '@expo/vector-icons/build/createIconSet';
+import React from 'react';
 
 type IconButtonProps = {
   icon:

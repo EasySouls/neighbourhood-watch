@@ -2,8 +2,9 @@ import axios, { AxiosError } from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
 import LocalStore from '../lib/store';
 import { CivilGuard, CodeConfirmResponse, SignUpResponse } from '../types';
-import { usePathname, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { showToast } from 'lib/toast';
+import React from 'react';
 
 interface AuthProps {
   authState?: {
@@ -37,7 +38,6 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
-  const pathname = usePathname();
 
   const [authState, setAuthState] = useState<{
     token: string | null;
@@ -60,9 +60,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         try {
           // Retrieve the current user based on the token
-          const { data: civilGuard } = await axios.get<CivilGuard>(
-            'auth/profile'
-          );
+          const { data: civilGuard } =
+            await axios.get<CivilGuard>('auth/profile');
           setAuthState({ token, authenticated: true, civilGuard });
           // Redirect to the app if the user is already authenticated
           router.replace('/(app)');

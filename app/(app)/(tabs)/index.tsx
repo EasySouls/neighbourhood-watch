@@ -12,13 +12,14 @@ import {
 } from '../../../lib/duties';
 import ActiveCurrentPatrol from '../../../components/duties/ActiveCurrentPatrol';
 import ActiveDuties from '../../../components/duties/ActiveDuties';
+import React from 'react';
 
 export default function HomeScreen() {
   const { authState } = useAuth();
   const router = useRouter();
 
-  const id = authState?.civilGuard?.id!;
-  const departmentId = authState?.civilGuard?.departmentId!;
+  const id = authState.civilGuard!.id;
+  const departmentId = authState.civilGuard!.departmentId;
 
   const activeDuties = useQuery({
     queryKey: ['duties', 'active'],
@@ -48,7 +49,7 @@ export default function HomeScreen() {
         <Text>You are not on duty</Text>
       )}
       <Button
-        theme='blue'
+        theme="blue"
         onPress={() => {
           router.push('/duties');
         }}

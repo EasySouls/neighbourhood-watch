@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
 import { fetchDuty } from 'lib/duties';
 import { H1, Main, Spinner, Text } from 'tamagui';
+import React from 'react';
 
 export default function DutyDetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -15,8 +16,8 @@ export default function DutyDetailsScreen() {
     queryFn: () => fetchDuty(id),
   });
 
-  const startedAt = new Date(duty?.started_at!);
-  const endedAt = new Date(duty?.ended_at!);
+  const startedAt = new Date(duty!.started_at!);
+  const endedAt = new Date(duty!.ended_at!);
   let timespan;
   if (duty?.ended_at) {
     timespan = new Date(endedAt.getTime() - startedAt.getTime());

@@ -4,12 +4,13 @@ import { Suspense } from 'react';
 import { getCivilGuardComplete } from '../../../lib/civilGuards';
 import { useAuth } from '../../../context/AuthContext';
 import CivilGuardInfo from '../../../components/civilGuard/CivilGuardInfo';
+import React from 'react';
 
 export default function SettingsPage() {
   const { authState } = useAuth();
   const { isLoading, data, error } = useQuery({
     queryKey: ['account', authState?.civilGuard?.accountId],
-    queryFn: () => getCivilGuardComplete(authState?.civilGuard?.id!),
+    queryFn: () => getCivilGuardComplete(authState.civilGuard!.id),
   });
 
   // TODO- That's not how U use Suspense. Either move the data fetching inside the component or don't use Suspense at all

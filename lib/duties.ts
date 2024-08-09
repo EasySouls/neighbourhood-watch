@@ -14,11 +14,11 @@ export async function fetchActiveDuties(departmentId: string): Promise<Duty[]> {
 // TODO - implement an api endpoint for this
 export async function fetchOwnActiveDuty(
   userId: string,
-  departmentId: string
+  departmentId: string,
 ): Promise<Duty | null> {
   try {
     const res = await axios.get<Duty[]>(
-      `/duties/department/${departmentId}/active`
+      `/duties/department/${departmentId}/active`,
     );
     const duties = res.data;
     return duties.find((duty) => duty.userId === userId) || null;

@@ -7,30 +7,36 @@ import { showToast } from 'lib/toast';
 import React from 'react';
 
 interface AuthProps {
-  authState?: {
+  authState: {
     token: string | null;
-    authenticated: boolean | null;
+    authenticated: boolean;
     civilGuard: CivilGuard | null;
   };
   onCodeConfirmSent?: (
     email: string,
-    code: number
+    code: number,
   ) => Promise<CodeConfirmResponse>;
   onSignUp?: (
     email: string,
     password: string,
-    authCode: number
+    authCode: number,
   ) => Promise<SignUpResponse>;
   onLogin?: (
     email: string,
-    password: string
+    password: string,
   ) => Promise<{ error: string | null }>;
   onLogout?: () => Promise<any>;
 }
 
 export const TOKEN_KEY = '__token__';
 
-const AuthContext = createContext<AuthProps>({});
+const AuthContext = createContext<AuthProps>({
+  authState: {
+    token: null,
+    authenticated: false,
+    civilGuard: null,
+  },
+});
 
 export const useAuth = () => {
   return useContext(AuthContext);
@@ -41,11 +47,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [authState, setAuthState] = useState<{
     token: string | null;
-    authenticated: boolean | null;
+    authenticated: boolean;
     civilGuard: CivilGuard | null;
   }>({
     token: null,
-    authenticated: null,
+    authenticated: false,
     civilGuard: null,
   });
 
@@ -56,7 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (token) {
         // Set the token in axios headers so that it is sent with every request
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 
         try {
           // Retrieve the current user based on the token
@@ -77,11 +83,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     loadToken();
-  }, []);
+  }, [router]);
 
   const sendCodeConfirm = async (
     email: string,
-    code: number
+    code: number,
   ): Promise<CodeConfirmResponse> => {
     try {
       const res = await axios.post('/auth/validateCode', { email, code });
@@ -98,7 +104,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signUp = async (
     email: string,
     password: string,
-    authCode: number
+    authCode: number,
   ): Promise<SignUpResponse> => {
     try {
       const res = await axios.post('/auth/signup', {
@@ -118,7 +124,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (
     email: string,
-    password: string
+    password: string,
   ): Promise<{ error: string | null }> => {
     try {
       const res = await axios.post<{ access_token: string }>('/auth/login', {
@@ -128,7 +134,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       const token = res.data.access_token;
 
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 
       await LocalStore.setItemAsync(TOKEN_KEY, token);
       console.log('Token:', token);
@@ -159,7 +165,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setAuthState({ token: null, authenticated: false, civilGuard: null });
 
       // Remove token from axios headers
-      axios.defaults.headers.common['Authorization'] = `Bearer null`;
+      axios.defaults.headers.common.Authorization = `Bearer null`;
     } catch (e) {
       console.error('Error logging in:', e);
       if (e instanceof AxiosError) {

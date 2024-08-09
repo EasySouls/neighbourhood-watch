@@ -2,20 +2,17 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./lib/*",
+        "./components/*",
+        "./constants/*",
+        "./hooks/*",
+        "./types/*",
+        "./context/*"
+      ]
+    },
   },
-  "paths": {
-    "@/*": [
-      "./lib/*",
-      "./components/*",
-      "./constants/*",
-      "./hooks/*",
-      "./types/*",
-      "./context/*"
-    ]
-  },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-  ]
+  "include": ["**/*.ts", "**/*.tsx", ".eslintrc.js"]
 }

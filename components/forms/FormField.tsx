@@ -64,7 +64,7 @@ const FormField = ({
           ]}
           value={value}
           placeholder={placeholder}
-          placeholderTextColor='#7B7B8B'
+          placeholderTextColor="#7B7B8B"
           onChangeText={onChangeText}
           autoCapitalize={autoCapitalize}
           secureTextEntry={secureTextEntry}

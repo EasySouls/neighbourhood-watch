@@ -24,9 +24,9 @@ function ActiveCurrentPatrol({ duty, onEnd }: ActiveCurrentPatrolProps) {
         <Paragraph> --- A résztvevő járőrök ---</Paragraph>
       </View>
       <Button
-        mt='$1'
-        borderRadius='$4'
-        backgroundColor='$blue10'
+        mt="$1"
+        borderRadius="$4"
+        backgroundColor="$blue10"
         onPress={onEnd}
       >
         Szolgálat befejezése

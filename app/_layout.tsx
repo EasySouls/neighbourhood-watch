@@ -61,8 +61,6 @@ export default function RootLayout() {
 
   const colorScheme = useColorScheme();
 
-  const hello = 'asd';
-
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   // Keep this piece of code above the return statements, to avoid 'Rendered more hooks than during the previous render' error.
   useEffect(() => {
@@ -92,16 +90,15 @@ function RootLayoutNav() {
   return (
     <SafeAreaProvider>
       <Stack>
-        <Stack.Screen name='(app)' options={{ headerShown: false }} />
-        <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
-        <Stack.Screen name='(auth)' options={{ headerShown: false }} />
+        <Stack.Screen name="(app)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       </Stack>
     </SafeAreaProvider>
   );
 }
 
 function onAppStateChange(status: AppStateStatus) {
-  if (Platform.OS != 'web') {
+  if (Platform.OS !== 'web') {
     focusManager.setFocused(status === 'active');
   }
 }

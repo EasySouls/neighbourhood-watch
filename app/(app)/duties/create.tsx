@@ -45,8 +45,8 @@ export default function CreateDutyScreen() {
   useEffect(() => {
     async function isThereActiveDuty() {
       const activeDuty = await fetchOwnActiveDuty(
-        authState?.civilGuard?.id!,
-        authState?.civilGuard?.departmentId!
+        authState.civilGuard!.id!,
+        authState.civilGuard!.departmentId!,
       );
 
       if (activeDuty) {
@@ -56,7 +56,7 @@ export default function CreateDutyScreen() {
     }
 
     isThereActiveDuty();
-  }, []);
+  }, [authState.civilGuard, router]);
 
   const [newDuty, setNewDuty] = useState<CreateDutyType>({
     name: '',
@@ -80,30 +80,33 @@ export default function CreateDutyScreen() {
     let hasError = false;
 
     if (newDuty.name === '') {
-      setErrors((errors) => ({ ...errors, name: 'Nem lehet üres a név' }));
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        name: 'Nem lehet üres a név',
+      }));
       hasError = true;
     } else {
-      setErrors((errors) => ({ ...errors, name: null }));
+      setErrors((prevErrors) => ({ ...prevErrors, name: null }));
     }
 
     if (newDuty.plateNumber === '') {
-      setErrors((errors) => ({
-        ...errors,
+      setErrors((prevErrors) => ({
+        ...prevErrors,
         plateNumber: 'Nem lehet üres a rendszám',
       }));
       hasError = true;
     } else {
-      setErrors((errors) => ({ ...errors, plateNumber: null }));
+      setErrors((prevErrors) => ({ ...prevErrors, plateNumber: null }));
     }
 
     if (newDuty.type === null) {
-      setErrors((errors) => ({
-        ...errors,
+      setErrors((prevErrors) => ({
+        ...prevErrors,
         type: 'Válaszd ki a szolgálat típusát',
       }));
       hasError = true;
     } else {
-      setErrors((errors) => ({ ...errors, type: null }));
+      setErrors((prevErrors) => ({ ...prevErrors, type: null }));
     }
 
     if (!hasError) {
@@ -122,33 +125,33 @@ export default function CreateDutyScreen() {
   }
 
   return (
-    <YStack gap='$4' padding='$4'>
-      <XStack gap='$2'>
-        <Label htmlFor='name'>Szolgálat neve</Label>
+    <YStack gap="$4" padding="$4">
+      <XStack gap="$2">
+        <Label htmlFor="name">Szolgálat neve</Label>
         <Input
           value={newDuty.name}
-          id='name'
+          id="name"
           onChangeText={(e) => setNewDuty((duty) => ({ ...duty, name: e }))}
         />
-        {errors.name && <Paragraph color='red'>{errors.name}</Paragraph>}
+        {errors.name && <Paragraph color="red">{errors.name}</Paragraph>}
       </XStack>
 
-      <XStack gap='$2'>
-        <Label htmlFor='plateNumber'>Rendszám</Label>
+      <XStack gap="$2">
+        <Label htmlFor="plateNumber">Rendszám</Label>
         <Input
           value={newDuty.plateNumber}
-          id='plateNumber'
+          id="plateNumber"
           onChangeText={(e) =>
             setNewDuty((duty) => ({ ...duty, plateNumber: e }))
           }
         />
         {errors.plateNumber && (
-          <Paragraph color='red'>{errors.plateNumber}</Paragraph>
+          <Paragraph color="red">{errors.plateNumber}</Paragraph>
         )}
       </XStack>
 
-      <XStack gap='$2'>
-        <Label htmlFor='type'>Szolgálat típusa</Label>
+      <XStack gap="$2">
+        <Label htmlFor="type">Szolgálat típusa</Label>
         <Select
           value={newDuty.type.type}
           onValueChange={(e) =>
@@ -158,13 +161,13 @@ export default function CreateDutyScreen() {
             }))
           }
           disablePreventBodyScroll
-          id='type'
+          id="type"
         >
           <Select.Trigger width={'$10'} iconAfter={ChevronDown}>
             <Select.Value>{newDuty.type.name}</Select.Value>
           </Select.Trigger>
 
-          <Select.Adapt when='sm' platform='touch'>
+          <Select.Adapt when="sm" platform="touch">
             <Sheet
               native={isNative}
               modal
@@ -182,7 +185,7 @@ export default function CreateDutyScreen() {
                 </Sheet.ScrollView>
               </Sheet.Frame>
               <Sheet.Overlay
-                animation='lazy'
+                animation="lazy"
                 enterStyle={{ opacity: 0 }}
                 exitStyle={{ opacity: 0 }}
               />
@@ -191,11 +194,11 @@ export default function CreateDutyScreen() {
 
           <Select.Content zIndex={2000}>
             <Select.ScrollUpButton
-              alignItems='center'
-              justifyContent='center'
-              position='relative'
-              width='100%'
-              height='$3'
+              alignItems="center"
+              justifyContent="center"
+              position="relative"
+              width="100%"
+              height="$3"
             >
               <YStack zIndex={10}>
                 <ChevronUp size={20} />
@@ -203,7 +206,7 @@ export default function CreateDutyScreen() {
             </Select.ScrollUpButton>
 
             <Select.Viewport
-              animation='quick'
+              animation="quick"
               animateOnly={['transform', 'opacity']}
               enterStyle={{ o: 0, y: -10 }}
               exitStyle={{ o: 0, y: 10 }}
@@ -212,8 +215,8 @@ export default function CreateDutyScreen() {
               <Select.Group>
                 {dutyTypes.map((item, i) => (
                   <Select.Item index={i} key={item.type} value={item.type}>
-                    <Select.ItemText color='black'>{item.name}</Select.ItemText>
-                    <Select.ItemIndicator marginLeft='auto'>
+                    <Select.ItemText color="black">{item.name}</Select.ItemText>
+                    <Select.ItemIndicator marginLeft="auto">
                       <Check size={16} />
                     </Select.ItemIndicator>
                   </Select.Item>
@@ -222,14 +225,14 @@ export default function CreateDutyScreen() {
 
               {isNative && (
                 <YStack
-                  position='absolute'
+                  position="absolute"
                   right={0}
                   top={0}
                   bottom={0}
-                  alignItems='center'
-                  justifyContent='center'
+                  alignItems="center"
+                  justifyContent="center"
                   width={'$4'}
-                  pointerEvents='none'
+                  pointerEvents="none"
                 >
                   <ChevronDown size={20} />
                 </YStack>
@@ -237,11 +240,11 @@ export default function CreateDutyScreen() {
             </Select.Viewport>
 
             <Select.ScrollDownButton
-              alignItems='center'
-              justifyContent='center'
-              position='relative'
-              width='100%'
-              height='$3'
+              alignItems="center"
+              justifyContent="center"
+              position="relative"
+              width="100%"
+              height="$3"
             >
               <YStack zIndex={10}>
                 <ChevronDown size={20} />
@@ -249,11 +252,11 @@ export default function CreateDutyScreen() {
             </Select.ScrollDownButton>
           </Select.Content>
         </Select>
-        {errors.type && <Paragraph color='red'>{errors.type}</Paragraph>}
+        {errors.type && <Paragraph color="red">{errors.type}</Paragraph>}
       </XStack>
 
       <Button
-        theme='blue'
+        theme="blue"
         width={'$16'}
         maxWidth={'50%'}
         onPress={() => handleStartNewDuty()}

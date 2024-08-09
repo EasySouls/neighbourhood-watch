@@ -33,7 +33,7 @@ export default function LoginScreen() {
   const { onLogin } = useAuth();
   const router = useRouter();
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
+  const [_, response, promptAsync] = Google.useAuthRequest({
     androidClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_ANDROID_DEV,
     webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_WEB_DEV,
   });
@@ -58,22 +58,6 @@ export default function LoginScreen() {
     router.replace('/(app)/');
   }
 
-  async function signInWithGoogle() {
-    setLoading(true);
-    const user = await LocalStore.getItemAsync(USER_KEY);
-    if (user) {
-      setUserInfo(JSON.parse(user));
-      showToast('Már be vagy jelentkezve!');
-      // router.replace('/');
-    }
-
-    if (response?.type === 'success') {
-      await getUserInfo(response.authentication?.accessToken!);
-    }
-
-    setLoading(false);
-  }
-
   async function getUserInfo(token: string) {
     try {
       const res = await axios.get('https://www.googleapis.com/userinfo/v2/me', {
@@ -90,12 +74,27 @@ export default function LoginScreen() {
   }
 
   React.useEffect(() => {
+    async function signInWithGoogle() {
+      setLoading(true);
+      const user = await LocalStore.getItemAsync(USER_KEY);
+      if (user) {
+        setUserInfo(JSON.parse(user));
+        showToast('Már be vagy jelentkezve!');
+        // router.replace('/');
+      }
+
+      if (response?.type === 'success') {
+        await getUserInfo(response.authentication!.accessToken);
+      }
+
+      setLoading(false);
+    }
     signInWithGoogle();
   }, [response]);
 
   // Warm up the browser on android before using it
   React.useEffect(() => {
-    if (Platform.OS == 'android') {
+    if (Platform.OS === 'android') {
       WebBrowser.warmUpAsync();
 
       return () => {
@@ -126,60 +125,66 @@ export default function LoginScreen() {
           style={{ width: 100, height: 100, borderRadius: 50 }}
         />
       ) : null}
-      <View style={[styles.container, { marginTop: insets.top }]}>
-        <View style={[styles.verticallySpaced, styles.mt20]}>
+      <View style={{ ...styles.container, marginTop: insets.top }}>
+        <View style={{ ...styles.verticallySpaced, ...styles.mt20 }}>
           <FormField
-            title='Email'
+            title="Email"
             value={form.email}
-            placeholder='example@email.com'
+            placeholder="example@email.com"
             onChangeText={(text) => setForm({ ...form, email: text })}
-            style={[{ marginTop: 12 }, styles.verticallySpaced]}
+            style={{ marginTop: 12, ...styles.verticallySpaced }}
             textStyle={textStyle}
           />
         </View>
         <View style={styles.verticallySpaced}>
           <FormPasswordField
-            title='Jelszó'
+            title="Jelszó"
             value={form.password}
-            placeholder='super-secret-password'
+            placeholder="super-secret-password"
             onChangeText={(text) => setForm({ ...form, password: text })}
-            style={[{ marginTop: 12 }, styles.verticallySpaced]}
+            style={{ marginTop: 12, ...styles.verticallySpaced }}
             textStyle={textStyle}
           />
         </View>
-        <View style={[styles.verticallySpaced, styles.mt20, { width: '40%' }]}>
+        <View
+          style={{ ...styles.verticallySpaced, ...styles.mt20, width: '40%' }}
+        >
           <TouchableOpacity
             disabled={loading}
             style={styles.buttonContainer}
             onPress={() => signInWithEmail()}
           >
-            <Text style={[styles.buttonText, loginTextStyle]}>BELÉPÉS</Text>
+            <Text style={{ ...styles.buttonText, ...loginTextStyle }}>
+              BELÉPÉS
+            </Text>
           </TouchableOpacity>
         </View>
-        <View style={[styles.verticallySpaced, styles.mt20, { width: '40%' }]}>
+        <View
+          style={{ ...styles.verticallySpaced, ...styles.mt20, width: '40%' }}
+        >
           <TouchableOpacity
             disabled={loading}
             style={styles.googleButtonContainer}
             onPress={() => promptAsync()}
           >
-            <Text style={[styles.googleButtonText, buttonTextStyle]}>
+            <Text style={{ ...styles.googleButtonText, ...buttonTextStyle }}>
               BELÉPÉS GOOGLE FIÓKKAL
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={[styles.verticallySpaced, { marginTop: 12 }]}>
-          <Text style={[{ marginLeft: 8 }, textStyle]}>
+        <View style={{ ...styles.verticallySpaced, marginTop: 12 }}>
+          <Text style={{ marginLeft: 8, ...textStyle }}>
             Nem vagy még regisztrálva?
           </Text>
           <Link
             href={'/(auth)/signup'}
-            style={[styles.signupLink, signupLinkStyle]}
+            style={{ ...styles.signupLink, ...signupLinkStyle }}
           >
             Regisztráció
           </Link>
         </View>
       </View>
-      <StatusBar style='auto' />
+      <StatusBar style="auto" />
     </SafeAreaView>
   );
 }

@@ -67,7 +67,7 @@ const FormPasswordField = ({
           ]}
           value={value}
           placeholder={placeholder}
-          placeholderTextColor='#7B7B8B'
+          placeholderTextColor="#7B7B8B"
           onChangeText={onChangeText}
           autoCapitalize={autoCapitalize}
           secureTextEntry={!showPassword}
@@ -77,7 +77,7 @@ const FormPasswordField = ({
           <FontAwesome
             name={showPassword ? 'eye-slash' : 'eye'}
             size={24}
-            color='#7B7B8B'
+            color="#7B7B8B"
           />
         </TouchableOpacity>
       </View>

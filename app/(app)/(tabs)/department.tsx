@@ -7,9 +7,9 @@ import React from 'react';
 
 export default function DepartmentScreen() {
   const { authState } = useAuth();
-  const {} = useQuery({
+  const { data: department } = useQuery({
     queryKey: ['departments'],
-    queryFn: () => fetchDepartmentInfo(authState?.civilGuard?.departmentId!),
+    queryFn: () => fetchDepartmentInfo(authState.civilGuard!.departmentId),
   });
 
   return (
@@ -17,7 +17,8 @@ export default function DepartmentScreen() {
       <Container />
       <YStack>
         <H2>Department Screen</H2>
-        <Input placeholder='Polgárőr keresése' />
+        {department && <H2>{department.name}</H2>}
+        <Input placeholder="Polgárőr keresése" />
       </YStack>
     </View>
   );

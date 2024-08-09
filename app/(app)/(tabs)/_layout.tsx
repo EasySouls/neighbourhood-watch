@@ -1,12 +1,11 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable, View, Text } from 'react-native';
+import { Tabs } from 'expo-router';
 
-import Colors from '../../../constants/Colors';
-import { useColorScheme } from '../../../components/useColorScheme';
 import Header from '../../../components/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Text, View } from 'tamagui';
 
 interface TabBarIconProps {
   name: string;
@@ -17,7 +16,7 @@ interface TabBarIconProps {
 
 function TabBarIcon(props: TabBarIconProps) {
   return (
-    <View style={{ alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+    <View alignItems="center" justifyContent="center" gap="$1">
       <FontAwesome
         size={28}
         style={{ marginBottom: -3 }}
@@ -25,10 +24,8 @@ function TabBarIcon(props: TabBarIconProps) {
         name={props.iconName}
       />
       <Text
-        // className={`${
-        //   props.focused ? 'font-psemibold' : 'font-pregular'
-        // } text-xs`}
-        style={{ color: props.color }}
+        style={{ color: props.color, fontWeight: 'regular', fontSize: '12' }}
+        focusStyle={{ fontWeight: 'semibold' }}
       >
         {props.name}
       </Text>
@@ -37,7 +34,6 @@ function TabBarIcon(props: TabBarIconProps) {
 }
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
   const insets = useSafeAreaInsets();
 
   return (
@@ -61,70 +57,70 @@ export default function TabLayout() {
         }}
       >
         <Tabs.Screen
-          name='index'
+          name="index"
           options={{
             title: 'Duties',
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
-                iconName='car'
+                iconName="car"
                 color={color}
-                name='Szolgálatok'
+                name="Szolgálatok"
                 focused={focused}
               />
             ),
-            headerRight: () => (
-              <Link href='/modal' asChild>
-                <Pressable>
-                  {({ pressed }) => (
-                    <FontAwesome
-                      name='info-circle'
-                      size={25}
-                      color={Colors[colorScheme ?? 'light'].text}
-                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                    />
-                  )}
-                </Pressable>
-              </Link>
-            ),
+            // headerRight: () => (
+            //   <Link href="/modal" asChild>
+            //     <Pressable>
+            //       {({ pressed }) => (
+            //         <FontAwesome
+            //           name="info-circle"
+            //           size={25}
+            //           color={Colors[colorScheme ?? 'light'].text}
+            //           style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+            //         />
+            //       )}
+            //     </Pressable>
+            //   </Link>
+            // ),
           }}
         />
         <Tabs.Screen
-          name='calendar'
+          name="calendar"
           options={{
             title: 'Naptár',
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
-                iconName='calendar'
+                iconName="calendar"
                 color={color}
-                name='Naptár'
+                name="Naptár"
                 focused={focused}
               />
             ),
           }}
         />
         <Tabs.Screen
-          name='department'
+          name="department"
           options={{
             title: 'Osztály',
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
-                iconName='building'
+                iconName="building"
                 color={color}
-                name='Osztály'
+                name="Osztály"
                 focused={focused}
               />
             ),
           }}
         />
         <Tabs.Screen
-          name='settings'
+          name="settings"
           options={{
             title: 'Beállítások',
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
-                iconName='cog'
+                iconName="cog"
                 color={color}
-                name='Beállítások'
+                name="Beállítások"
                 focused={focused}
               />
             ),

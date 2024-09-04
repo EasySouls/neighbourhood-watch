@@ -28,7 +28,7 @@ export default function HomeScreen() {
 
   const ownActiveDuty = useQuery({
     queryKey: ['duties', 'active', id],
-    queryFn: () => fetchOwnActiveDuty(id, departmentId),
+    queryFn: () => fetchOwnActiveDuty(),
   });
 
   const stopActiveDutyMutation = useMutation({

@@ -1,4 +1,4 @@
-import { View, Text, Paragraph, Button } from 'tamagui';
+import { View, Text, Paragraph, Button, Card } from 'tamagui';
 import { dutyTypeToString } from '../../lib/utils';
 import { Duty } from '../../types';
 import { Link } from 'expo-router';
@@ -12,25 +12,27 @@ interface ActiveCurrentPatrolProps {
 function ActiveCurrentPatrol({ duty, onEnd }: ActiveCurrentPatrolProps) {
   return (
     <Link href={`/(app)/duties/${duty.id}`} asChild>
-      {/* Info Bar */}
-      <View>
-        <Text>{duty.plate_num}</Text>
-        <Text>{dutyTypeToString(duty.type)}</Text>
-        <Text>{new Date(duty.started_at).toLocaleTimeString()}</Text>
-      </View>
+      <Card>
+        {/* Info Bar */}
+        <View>
+          <Text>{duty.plate_num}</Text>
+          <Text>{dutyTypeToString(duty.type)}</Text>
+          <Text>{new Date(duty.started_at).toLocaleTimeString()}</Text>
+        </View>
 
-      {/* Fellow officers on the duty */}
-      <View>
-        <Paragraph> --- A résztvevő járőrök ---</Paragraph>
-      </View>
-      <Button
-        mt="$1"
-        borderRadius="$4"
-        backgroundColor="$blue10"
-        onPress={onEnd}
-      >
-        Szolgálat befejezése
-      </Button>
+        {/* Fellow officers on the duty */}
+        <View>
+          <Paragraph> --- A résztvevő járőrök ---</Paragraph>
+        </View>
+        <Button
+          mt="$1"
+          borderRadius="$4"
+          backgroundColor="$blue10"
+          onPress={onEnd}
+        >
+          Szolgálat befejezése
+        </Button>
+      </Card>
     </Link>
   );
 }

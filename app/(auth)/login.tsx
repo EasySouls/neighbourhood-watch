@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
-  Text,
   TouchableOpacity,
   Image,
   Platform,
 } from 'react-native';
+import { Text } from 'tamagui';
 import { Link, useRouter } from 'expo-router';
 import {
   SafeAreaView,

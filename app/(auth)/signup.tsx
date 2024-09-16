@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import {
-  StyleSheet,
   View,
   Text,
+} from 'tamagui'
+import {
+  StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  Pressable,
 } from 'react-native';
 import { showToast } from '../../lib/toast';
 import { StatusBar } from 'expo-status-bar';
@@ -60,7 +63,6 @@ export default function SignUpScreen() {
 
     if (res?.error) {
       showToast('Hiba történt a regisztráció során.');
-      setLoading(false);
       return;
     }
 
@@ -125,7 +127,7 @@ export default function SignUpScreen() {
         style={[
           styles.verticallySpaced,
           textStyle,
-          { fontSize: 24, marginTop: 20, marginBottom: 20 },
+          { fontSize: 24, marginTop: 20, marginBottom: 20, fontWeight: 'bold', },
         ]}
       >
         Lépj be az email címeddel és a kapott kóddal
@@ -146,7 +148,7 @@ export default function SignUpScreen() {
         style={[{ marginTop: 12 }, styles.verticallySpaced]}
         textStyle={textStyle}
       />
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+      <View style={[styles.verticallySpaced2, styles.mt20]}>
         <TouchableOpacity
           disabled={loading}
           style={styles.buttonContainer}
@@ -175,7 +177,8 @@ const styles = StyleSheet.create({
     display: 'flex',
   },
   buttonContainer: {
-    backgroundColor: '#0070f3',
+    width: '50%',
+    backgroundColor: '#1d3557',
     padding: 12,
     borderRadius: 10,
     margin: 8,
@@ -197,6 +200,14 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 4,
     alignSelf: 'stretch',
+  },
+  verticallySpaced2: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: 'stretch',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   mt20: {
     marginTop: 20,

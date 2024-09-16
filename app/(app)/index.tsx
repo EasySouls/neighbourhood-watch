@@ -1,7 +1,9 @@
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
+
 
 import { Text, View } from 'react-native';
 import ActiveCurrentPatrol from '../../components/duties/ActiveCurrentPatrol';
+import { Duty, DutyType } from '../../types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   getActiveDuties,
@@ -9,16 +11,12 @@ import {
   stopActiveDuty,
 } from '../../lib/duties';
 import ActiveDuties from '../../components/duties/ActiveDuties';
-import { Button } from 'tamagui';
+import { Link } from 'expo-router';
 import { useAuth } from '../../context/AuthContext';
-import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
-  const { authState } = useAuth();
-  const router = useRouter();
-
-  const id = authState?.civilGuard?.id!;
-  const departmentId = authState?.civilGuard?.departmentId!;
+  const departmentId = '5f519f92-1468-4bbb-8e7f-df34e3ce527b';
+  const userId = '5f519f92-1468-4bbb-8e7f-df34e3ce527b';
 
   const activeDuties = useQuery({
     queryKey: ['duties', 'active'],
@@ -27,16 +25,20 @@ export default function HomeScreen() {
 
   const ownActiveDuty = useQuery({
     queryKey: ['duties', 'active'],
-    queryFn: () => getOwnActiveDuty(id, departmentId),
+    queryFn: () => getOwnActiveDuty(userId, departmentId),
   });
 
   const stopActiveDutyMutation = useMutation({
-    mutationKey: ['duties', 'active'],
     mutationFn: (dutyId: string) => stopActiveDuty(dutyId),
   });
 
   return (
     <View style={styles.container}>
+      <Link href='/duties/sd/1' asChild>
+        <Pressable>
+          <Text>Szolgálat 1</Text>
+        </Pressable>
+      </Link>
       {ownActiveDuty.data ? (
         <ActiveCurrentPatrol
           duty={ownActiveDuty.data}
@@ -47,18 +49,10 @@ export default function HomeScreen() {
       ) : (
         <Text>You are not on duty</Text>
       )}
-      <Button
-        theme='blue'
-        onPress={() => {
-          router.push('/duties/create');
-        }}
-      >
-        Új szolgálat
-      </Button>
       {activeDuties.data ? (
         <ActiveDuties duties={activeDuties.data} />
       ) : (
-        <Text>Nincsenek aktív szolgálatok</Text>
+        <Text>There are no active duties</Text>
       )}
     </View>
   );

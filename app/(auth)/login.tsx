@@ -50,10 +50,6 @@ export default function LoginScreen() {
       return;
     }
 
-    // Need a little bit of delay so the jwt token can be saved
-    // If the user is immediately redirected, the token won't be found
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
     setLoading(false);
     router.replace('/(app)/');
   }
@@ -131,7 +127,7 @@ export default function LoginScreen() {
           <FormField
             title='Email'
             value={form.email}
-            placeholder='example@email.com'
+            placeholder='example@gmail.com'
             onChangeText={(text) => setForm({ ...form, email: text })}
             style={[{ marginTop: 12 }, styles.verticallySpaced]}
             textStyle={textStyle}
@@ -141,13 +137,13 @@ export default function LoginScreen() {
           <FormPasswordField
             title='Jelszó'
             value={form.password}
-            placeholder='super-secret-password'
+            placeholder='password'
             onChangeText={(text) => setForm({ ...form, password: text })}
             style={[{ marginTop: 12 }, styles.verticallySpaced]}
             textStyle={textStyle}
           />
         </View>
-        <View style={[styles.verticallySpaced, styles.mt20, { width: '40%' }]}>
+        <View style={[styles.verticallySpaced2, styles.mt20, { width: '100%' }]}>
           <TouchableOpacity
             disabled={loading}
             style={styles.buttonContainer}
@@ -156,18 +152,18 @@ export default function LoginScreen() {
             <Text style={[styles.buttonText, loginTextStyle]}>BELÉPÉS</Text>
           </TouchableOpacity>
         </View>
-        <View style={[styles.verticallySpaced, styles.mt20, { width: '40%' }]}>
+        <View style={[styles.verticallySpaced2, styles.mt20, { width: '100%' }]}>
           <TouchableOpacity
             disabled={loading}
             style={styles.googleButtonContainer}
             onPress={() => promptAsync()}
           >
             <Text style={[styles.googleButtonText, buttonTextStyle]}>
-              BELÉPÉS GOOGLE FIÓKKAL
+              BEJELENTKEZÉS GOOGLE FIÓKKAL
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={[styles.verticallySpaced, { marginTop: 12 }]}>
+        <View style={[styles.verticallySpaced2, { marginTop: 12 }]}>
           <Text style={[{ marginLeft: 8 }, textStyle]}>
             Nem vagy még regisztrálva?
           </Text>
@@ -189,21 +185,24 @@ const styles = StyleSheet.create({
     padding: 12,
     width: '100%',
     display: 'flex',
+    justifyContent: 'center',
   },
   buttonContainer: {
-    backgroundColor: '#0070f3',
+    width: '50%',
+    backgroundColor: '#1d3557',
     padding: 12,
     borderRadius: 10,
     margin: 8,
   },
   googleButtonContainer: {
+    width: '50%',
     backgroundColor: 'white',
     padding: 12,
     borderRadius: 10,
     margin: 8,
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: 18, 
     fontWeight: 'bold',
     alignSelf: 'center',
     textTransform: 'uppercase',
@@ -215,6 +214,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   signupLink: {
+    fontSize: 15,
     fontWeight: 'bold',
     marginLeft: 8,
     textDecorationLine: 'underline',
@@ -230,6 +230,16 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 4,
     alignSelf: 'stretch',
+    
+  },
+  verticallySpaced2: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: 'stretch',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    
   },
   mt20: {
     marginTop: 20,

@@ -1,33 +1,34 @@
 import { StyleSheet } from 'react-native';
 
 import { Text, View } from 'react-native';
-import ActiveCurrentPatrol from '../../components/duties/ActiveCurrentPatrol';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import {
-  getActiveDuties,
-  getOwnActiveDuty,
-  stopActiveDuty,
-} from '../../lib/duties';
-import ActiveDuties from '../../components/duties/ActiveDuties';
 import { Button } from 'tamagui';
-import { useAuth } from '../../context/AuthContext';
 import { useRouter } from 'expo-router';
+import { useAuth } from '../../../context/AuthContext';
+import {
+  fetchActiveDuties,
+  fetchOwnActiveDuty,
+  stopActiveDuty,
+} from '../../../lib/duties';
+import ActiveCurrentPatrol from '../../../components/duties/ActiveCurrentPatrol';
+import ActiveDuties from '../../../components/duties/ActiveDuties';
+import React from 'react';
 
 export default function HomeScreen() {
   const { authState } = useAuth();
   const router = useRouter();
 
-  const id = authState?.civilGuard?.id!;
-  const departmentId = authState?.civilGuard?.departmentId!;
+  const id = authState.civilGuard!.id;
+  const departmentId = authState.civilGuard!.departmentId;
 
   const activeDuties = useQuery({
     queryKey: ['duties', 'active'],
-    queryFn: () => getActiveDuties(departmentId),
+    queryFn: () => fetchActiveDuties(departmentId),
   });
 
   const ownActiveDuty = useQuery({
-    queryKey: ['duties', 'active'],
-    queryFn: () => getOwnActiveDuty(id, departmentId),
+    queryKey: ['duties', 'active', id],
+    queryFn: () => fetchOwnActiveDuty(),
   });
 
   const stopActiveDutyMutation = useMutation({
@@ -48,9 +49,9 @@ export default function HomeScreen() {
         <Text>You are not on duty</Text>
       )}
       <Button
-        theme='blue'
+        theme="blue"
         onPress={() => {
-          router.push('/duties/create');
+          router.push('/duties');
         }}
       >
         Új szolgálat

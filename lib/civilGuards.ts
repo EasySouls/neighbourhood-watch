@@ -7,7 +7,7 @@ export async function getCivilGuard(id: string): Promise<CivilGuard> {
 }
 
 export async function getCivilGuardComplete(
-  id: string
+  id: string,
 ): Promise<CivilGuardComplete> {
   const res = await axios.get(`/civilguards/${id}?complete=true`);
   return res.data;

@@ -1,5 +1,6 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, View, Pressable, Text } from 'react-native';
+import React from 'react';
 
 type ButtonProps = {
   label: string;
@@ -21,9 +22,9 @@ export default function Button({ label, theme, onPress }: ButtonProps) {
           onPress={onPress}
         >
           <FontAwesome
-            name='picture-o'
+            name="picture-o"
             size={18}
-            color='#25292e'
+            color="#25292e"
             style={styles.buttonIcon}
           />
           <Text style={[styles.buttonLabel, { color: '#25292e' }]}>

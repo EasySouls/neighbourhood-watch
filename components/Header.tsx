@@ -3,6 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
 import { showToast } from '../lib/toast';
+import React from 'react';
 
 export default function Header() {
   const router = useRouter();

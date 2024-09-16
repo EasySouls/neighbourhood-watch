@@ -8,7 +8,7 @@ export const initAxios = () => {
 
   axios.defaults.baseURL = process.env.EXPO_PUBLIC_BACKEND_URL;
   axios.defaults.headers.common['Content-Type'] = 'application/json';
-  axios.defaults.headers.common['Accept'] = 'application/json';
+  axios.defaults.headers.common.Accept = 'application/json';
 
   // Add a request interceptor if needed
 
@@ -27,7 +27,7 @@ export const initAxios = () => {
         return Promise.reject(error.response.data);
       }
       return Promise.reject(error);
-    }
+    },
   );
 };
 

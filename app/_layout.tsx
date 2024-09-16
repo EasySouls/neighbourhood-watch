@@ -19,16 +19,17 @@ import { initAxios, queryClient } from '../lib/queryClient';
 import { AuthProvider } from '../context/AuthContext';
 import { TamaguiProvider } from 'tamagui';
 import tamaguiConfig from '../tamagui.config';
+import React from 'react';
 
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from 'expo-router';
 
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
-};
+// export const unstable_settings = {
+//   // Ensure that reloading on `/modal` keeps a back button present.
+//   initialRouteName: '(tabs)',
+// };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -52,16 +53,19 @@ export default function RootLayout() {
     initAxios();
   }, []);
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
-
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  const colorScheme = useColorScheme();
+
+  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
+  // Keep this piece of code above the return statements, to avoid 'Rendered more hooks than during the previous render' error.
+  useEffect(() => {
+    if (error) throw error;
+  }, [error]);
 
   if (!loaded && !error) {
     return null;
@@ -70,35 +74,31 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <RootLayoutNav />
+        <ThemeProvider
+          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+        >
+          <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme!}>
+            <RootLayoutNav />
+          </TamaguiProvider>
+        </ThemeProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-
   return (
     <SafeAreaProvider>
-      <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme!}>
-        <ThemeProvider
-          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-        >
-          <Stack>
-            <Stack.Screen name='(app)' options={{ headerShown: false }} />
-            <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
-            <Stack.Screen name='(auth)' options={{ headerShown: false }} />
-            <Stack.Screen name='duties' options={{ headerShown: false }} />
-          </Stack>
-        </ThemeProvider>
-      </TamaguiProvider>
+      <Stack>
+        <Stack.Screen name="(app)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      </Stack>
     </SafeAreaProvider>
   );
 }
 
 function onAppStateChange(status: AppStateStatus) {
-  if (Platform.OS != 'web') {
+  if (Platform.OS !== 'web') {
     focusManager.setFocused(status === 'active');
   }
 }

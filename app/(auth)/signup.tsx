@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Pressable,
+  Linking,
 } from 'react-native';
 import { showToast } from '../../lib/toast';
 import { StatusBar } from 'expo-status-bar';
@@ -127,7 +128,10 @@ export default function SignUpScreen() {
         style={[
           styles.verticallySpaced,
           textStyle,
-          { fontSize: 24, marginTop: 20, marginBottom: 20, fontWeight: 'bold', },
+          { fontSize: 24, 
+            marginTop: 20, 
+            marginBottom: 20, 
+            fontWeight: 'bold', },
         ]}
       >
         Lépj be az email címeddel és a kapott kóddal
@@ -140,6 +144,22 @@ export default function SignUpScreen() {
         style={[{ marginTop: 12 }, styles.verticallySpaced]}
         textStyle={textStyle}
       />
+      <Text style={[
+          styles.verticallySpaced,
+          styles.infoStyle,
+          ]}>
+            A kódokat az egyesületük fogja megkapni, 
+            amint szerződést kötött az alkalmazás használatára.
+            Amennyiben még nincs szerződésük, látogassanak el
+            <Pressable onPress={() => Linking.openURL('https://www.google.com')}>
+                  {({ pressed }) =>
+                    <Text style={{
+                      textDecorationLine: 'underline',
+                      color: pressed ? '#1d3557' : '#1d3557'
+                    }}>weboldalunkra!</Text>
+                  }
+            </Pressable>
+      </Text>
       <FormField
         title='Email'
         value={email}
@@ -212,4 +232,11 @@ const styles = StyleSheet.create({
   mt20: {
     marginTop: 20,
   },
+  infoStyle: {
+    color: '#1d3557',
+    fontSize: 13,
+    paddingTop: 10,
+    paddingBottom: 20,
+    fontStyle: 'italic',
+  }
 });

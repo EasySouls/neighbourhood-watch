@@ -151,14 +151,12 @@ export default function SignUpScreen() {
             A kódokat az egyesületük fogja megkapni, 
             amint szerződést kötött az alkalmazás használatára.
             Amennyiben még nincs szerződésük, látogassanak el
-            <Pressable onPress={() => Linking.openURL('https://www.google.com')}>
-                  {({ pressed }) =>
-                    <Text style={{
-                      textDecorationLine: 'underline',
-                      color: pressed ? '#1d3557' : '#1d3557'
-                    }}>weboldalunkra!</Text>
-                  }
-            </Pressable>
+            <TouchableOpacity onPress={() => Linking.openURL('http://google.com')}>
+              <Text style={{color: 'blue'
+              }}>
+                  weboldalunkra!
+              </Text>
+            </TouchableOpacity>
       </Text>
       <FormField
         title='Email'

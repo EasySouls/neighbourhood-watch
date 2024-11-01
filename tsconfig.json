@@ -12,7 +12,7 @@
         "./types/*",
         "./context/*"
       ]
-    },
+    }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".eslintrc.js"]
+  "include": ["**/*.ts", "**/*.tsx", ".eslint.config.mjs"]
 }

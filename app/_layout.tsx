@@ -7,7 +7,7 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from '@react-navigation/native';
-import { Stack } from 'expo-router';
+import { Slot, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
@@ -15,7 +15,7 @@ import 'react-native-reanimated';
 import { useColorScheme } from '../components/useColorScheme';
 import { LogBox } from 'react-native';
 import { useAuth } from '@clerk/clerk-expo';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+// import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { focusManager, QueryClientProvider } from '@tanstack/react-query';
 import { AppStateStatus, Platform } from 'react-native';
 import { useOnlineManager } from '../hooks/useOnlineManager';
@@ -34,9 +34,10 @@ import {
 } from '@expo-google-fonts/poppins';
 import { useReactQueryDevTools } from '@dev-plugins/react-query';
 import { ClerkProvider, ClerkLoaded } from '@clerk/clerk-expo';
-import { ConvexReactClient } from 'convex/react';
+import { ConvexReactClient, useConvexAuth } from 'convex/react';
 import { ConvexProviderWithClerk } from 'convex/react-clerk';
 import { tokenCache } from '@/tokenCache';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -71,7 +72,10 @@ LogBox.ignoreLogs(['Clerk: Clerk has been loaded with development keys']);
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+function RootLayoutNav() {
+  const { isLoading, isAuthenticated } = useConvexAuth();
+  const router = useRouter();
+
   useOnlineManager();
 
   useAppState(onAppStateChange);
@@ -97,17 +101,32 @@ export default function RootLayout() {
     }
   }, [fontsLoaded]);
 
-  const colorScheme = useColorScheme();
+  useEffect(() => {
+    if (isLoading) return;
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  // Keep this piece of code above the return statements, to avoid 'Rendered more hooks than during the previous render' error.
-  // useEffect(() => {
-  //   if (error) throw error;
-  // }, [error]);
+    // const inTabsGroup = segments[0] === '(tabs)';
+
+    if (!isAuthenticated) {
+      router.replace('/(auth)/login');
+    } else {
+      router.replace('/(app)/(tabs)');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, isLoading]);
 
   if (!fontsLoaded) {
     return null;
   }
+
+  return (
+    <SafeAreaProvider>
+      <Slot />;
+    </SafeAreaProvider>
+  );
+}
+
+function RootLayout() {
+  const colorScheme = useColorScheme();
 
   return (
     <ClerkProvider publishableKey={publishableKey!} tokenCache={tokenCache}>
@@ -130,19 +149,10 @@ export default function RootLayout() {
   );
 }
 
-function RootLayoutNav() {
-  return (
-    <SafeAreaProvider>
-      <Stack>
-        <Stack.Screen name="(app)" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      </Stack>
-    </SafeAreaProvider>
-  );
-}
-
 function onAppStateChange(status: AppStateStatus) {
   if (Platform.OS !== 'web') {
     focusManager.setFocused(status === 'active');
   }
 }
+
+export default RootLayout;

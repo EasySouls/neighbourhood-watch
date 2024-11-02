@@ -24,7 +24,7 @@ function TabBarIcon(props: TabBarIconProps) {
         name={props.iconName}
       />
       <Text
-        style={{ color: props.color, fontWeight: 'regular', fontSize: '12' }}
+        style={{ color: props.color, fontWeight: 'regular', fontSize: 12 }}
         focusStyle={{ fontWeight: 'semibold' }}
       >
         {props.name}

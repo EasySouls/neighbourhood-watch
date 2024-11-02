@@ -1,19 +1,21 @@
 import React from 'react';
 import { Redirect, Stack } from 'expo-router';
-import { useAuth } from '../../context/AuthContext';
+import { Authenticated, useConvexAuth } from 'convex/react';
 
 const AuthenticatedLayout = () => {
-  const { authState } = useAuth();
+  const { isAuthenticated } = useConvexAuth();
 
-  if (authState?.authenticated === null || authState?.authenticated === false) {
+  if (!isAuthenticated) {
     return <Redirect href="/(auth)/login" />;
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="duties" />
-    </Stack>
+    <Authenticated>
+      <Stack screenOptions={{ headerShown: false }} initialRouteName="(tabs)">
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="duties" />
+      </Stack>
+    </Authenticated>
   );
 };
 

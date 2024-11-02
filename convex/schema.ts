@@ -6,6 +6,7 @@ export const User = {
   clerkId: v.string(),
   firstName: v.optional(v.string()),
   lastName: v.optional(v.string()),
+  imageUrl: v.optional(v.string()),
   pushToken: v.optional(v.string()),
 };
 

@@ -11,7 +11,7 @@ const AuthenticatedLayout = () => {
 
   return (
     <Authenticated>
-      <Stack screenOptions={{ headerShown: false }} initialRouteName="(tabs)">
+      <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="duties" />
       </Stack>

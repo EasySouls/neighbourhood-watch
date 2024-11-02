@@ -7,9 +7,11 @@ import ActiveCurrentPatrol from '../../../components/duties/ActiveCurrentPatrol'
 import ActiveDuties from '../../../components/duties/ActiveDuties';
 import React from 'react';
 import { DutyType } from '@/index';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   const ownActiveDuty = {
     data: {
@@ -50,7 +52,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={{ ...styles.container, marginTop: insets.top }}>
       {ownActiveDuty.data ? (
         <ActiveCurrentPatrol duty={ownActiveDuty.data} onEnd={() => {}} />
       ) : (

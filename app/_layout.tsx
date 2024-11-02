@@ -120,7 +120,7 @@ function RootLayoutNav() {
 
   return (
     <SafeAreaProvider>
-      <Slot />;
+      <Slot />
     </SafeAreaProvider>
   );
 }

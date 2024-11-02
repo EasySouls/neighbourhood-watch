@@ -14,5 +14,11 @@
       ]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".eslint.config.mjs"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".eslint.config.mjs",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ]
 }

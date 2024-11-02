@@ -39703,6 +39703,7 @@
       "fastSchemeChange": true,
       "shouldAddPrefersColorThemes": true
     },
+    "reactNative": true,
     "unset": {
       "fontFamily": "$body"
     },

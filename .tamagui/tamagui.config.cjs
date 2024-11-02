@@ -44675,7 +44675,10 @@ var Container = (0, import_core58.styled)(YStack, {
   flex: 1,
   padding: 24
 });
-var tamaguiConfig = createTamagui(config);
+var tamaguiConfig = createTamagui({
+  ...config,
+  reactNative: true
+});
 var tamagui_config_default = tamaguiConfig;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

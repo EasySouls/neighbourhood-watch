@@ -12,7 +12,10 @@
   },
   "dependencies": {
     "@babel/plugin-transform-export-namespace-from": "^7.24.7",
+    "@clerk/clerk-expo": "^2.2.30",
     "@dev-plugins/react-query": "^0.0.7",
+    "@expo-google-fonts/poppins": "^0.2.3",
+    "@expo-google-fonts/roboto": "^0.2.3",
     "@expo/metro-runtime": "~3.2.1",
     "@expo/vector-icons": "^14.0.2",
     "@react-native-async-storage/async-storage": "1.23.1",
@@ -83,4 +86,3 @@
     ]
   }
 }
-

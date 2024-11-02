@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Platform } from 'react-native';
 import { Text } from 'tamagui';
 import { Link, useRouter } from 'expo-router';
 import {
@@ -9,32 +9,28 @@ import {
 import FormField from '../../components/forms/FormField';
 import FormPasswordField from '../../components/forms/FormPasswordField';
 import { StatusBar } from 'expo-status-bar';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
 import { showToast } from '../../lib/toast';
+import axios from 'axios';
+import LocalStore, { USER_KEY } from '../../lib/store';
 import { useAuth } from '../../context/AuthContext';
 import { useColorScheme } from '../../components/useColorScheme';
-import { useOAuth } from '@clerk/clerk-expo';
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
+  const [userInfo, setUserInfo] = useState<any>(null);
   const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
-
-  const { startOAuthFlow } = useOAuth({ strategy: 'oauth_google' });
 
   const { onLogin } = useAuth();
   const router = useRouter();
 
-  const handleGoogleLogin = async () => {
-    try {
-      const { createdSessionId, setActive } = await startOAuthFlow();
-      console.log('createdSessionId: ', createdSessionId);
-      if (createdSessionId) {
-        setActive!({ session: createdSessionId });
-      }
-    } catch (error) {
-      console.error('Error logging in with google: ', error);
-      showToast('Hiba történt a bejelentkezés közben');
-    }
-  };
+  const [_, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_ANDROID_DEV,
+    webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_WEB_DEV,
+  });
 
   async function signInWithEmail() {
     setLoading(true);
@@ -56,6 +52,51 @@ export default function LoginScreen() {
     router.replace('/(app)/');
   }
 
+  async function getUserInfo(token: string) {
+    try {
+      const res = await axios.get('https://www.googleapis.com/userinfo/v2/me', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const user = res.data;
+      await LocalStore.setItemAsync(USER_KEY, JSON.stringify(user));
+      setUserInfo(user);
+    } catch (error) {
+      console.error('Error getting user info: ', error);
+      showToast('Hiba történt a felhasználói adatok lekérése közben');
+    }
+  }
+
+  React.useEffect(() => {
+    async function signInWithGoogle() {
+      setLoading(true);
+      const user = await LocalStore.getItemAsync(USER_KEY);
+      if (user) {
+        setUserInfo(JSON.parse(user));
+        showToast('Már be vagy jelentkezve!');
+        // router.replace('/');
+      }
+
+      if (response?.type === 'success') {
+        await getUserInfo(response.authentication!.accessToken);
+      }
+
+      setLoading(false);
+    }
+    signInWithGoogle();
+  }, [response]);
+
+  // Warm up the browser on android before using it
+  React.useEffect(() => {
+    if (Platform.OS === 'android') {
+      WebBrowser.warmUpAsync();
+
+      return () => {
+        WebBrowser.coolDownAsync();
+      };
+    }
+  }, []);
+
   const colorScheme = useColorScheme();
   const textStyle =
     colorScheme === 'dark' ? styles.darkThemeText : styles.lightThemeText;
@@ -73,6 +114,11 @@ export default function LoginScreen() {
   return (
     <SafeAreaView>
       <View style={{ ...styles.container, marginTop: insets.top }}>
+        {userInfo && (
+          <Text style={{ ...textStyle }}>
+            Be vagy jelentkezve mint: {userInfo.email}
+          </Text>
+        )}
         <View style={{ ...styles.verticallySpaced, ...styles.mt20 }}>
           <FormField
             title="Email"
@@ -112,7 +158,7 @@ export default function LoginScreen() {
           <TouchableOpacity
             disabled={loading}
             style={styles.googleButtonContainer}
-            onPress={() => handleGoogleLogin()}
+            onPress={() => promptAsync()}
           >
             <Text style={{ ...styles.googleButtonText, ...buttonTextStyle }}>
               BELÉPÉS GOOGLE FIÓKKAL

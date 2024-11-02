@@ -14,6 +14,7 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '../components/useColorScheme';
 import { LogBox } from 'react-native';
+import { useAuth } from '@clerk/clerk-expo';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { focusManager, QueryClientProvider } from '@tanstack/react-query';
 import { AppStateStatus, Platform } from 'react-native';
@@ -33,6 +34,8 @@ import {
 } from '@expo-google-fonts/poppins';
 import { useReactQueryDevTools } from '@dev-plugins/react-query';
 import { ClerkProvider, ClerkLoaded } from '@clerk/clerk-expo';
+import { ConvexReactClient } from 'convex/react';
+import { ConvexProviderWithClerk } from 'convex/react-clerk';
 import { tokenCache } from '@/tokenCache';
 
 export {
@@ -51,6 +54,17 @@ if (!publishableKey) {
     'Missing Publishable Key. Please set EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY in your .env',
   );
 }
+
+const convexUrl = process.env.EXPO_PUBLIC_CONVEX_URL;
+if (!convexUrl) {
+  throw new Error(
+    'Missing Convex URL. Please set EXPO_PUBLIC_CONVEX_URL in your .env',
+  );
+}
+
+const convexClient = new ConvexReactClient(convexUrl, {
+  unsavedChangesWarning: false,
+});
 
 LogBox.ignoreLogs(['Clerk: Clerk has been loaded with development keys']);
 
@@ -98,17 +112,19 @@ export default function RootLayout() {
   return (
     <ClerkProvider publishableKey={publishableKey!} tokenCache={tokenCache}>
       <ClerkLoaded>
-        <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme!}>
-          <ThemeProvider
-            value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-          >
-            <QueryClientProvider client={queryClient}>
-              <AuthProvider>
-                <RootLayoutNav />
-              </AuthProvider>
-            </QueryClientProvider>
-          </ThemeProvider>
-        </TamaguiProvider>
+        <ConvexProviderWithClerk client={convexClient} useAuth={useAuth}>
+          <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme!}>
+            <ThemeProvider
+              value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+            >
+              <QueryClientProvider client={queryClient}>
+                <AuthProvider>
+                  <RootLayoutNav />
+                </AuthProvider>
+              </QueryClientProvider>
+            </ThemeProvider>
+          </TamaguiProvider>
+        </ConvexProviderWithClerk>
       </ClerkLoaded>
     </ClerkProvider>
   );

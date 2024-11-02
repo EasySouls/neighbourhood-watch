@@ -12,7 +12,7 @@ export const handleClerkWebhook = httpAction(async (ctx, request) => {
       console.log('User created:', data);
       ctx.runMutation(internal.users.createUser, {
         clerkId: data.id,
-        email: data.email_adresses[0].email_address,
+        email: data.email_addresses[0].email_address,
         firstName: data.first_name,
         lastName: data.last_name,
         imageUrl: data.image_url,

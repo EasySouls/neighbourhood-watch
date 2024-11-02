@@ -9,8 +9,8 @@ export const handleClerkWebhook = httpAction(async (ctx, request) => {
 
   switch (type) {
     case 'user.created':
-      console.log('User created:', data);
-      ctx.runMutation(internal.users.createUser, {
+      console.log('Creating user:', data);
+      await ctx.runMutation(internal.users.createUser, {
         clerkId: data.id,
         email: data.email_addresses[0].email_address,
         firstName: data.first_name,
@@ -20,10 +20,22 @@ export const handleClerkWebhook = httpAction(async (ctx, request) => {
       });
       break;
     case 'user.updated':
-      console.log('User updated:', data);
+      console.log('Updating user:', data);
+      await ctx.runMutation(internal.users.updateUser, {
+        _id: data.id,
+        clerkId: data.id,
+        email: data.email_addresses[0].email_address,
+        firstName: data.first_name,
+        lastName: data.last_name,
+        imageUrl: data.image_url,
+        pushToken: data.pushToken,
+      });
       break;
     case 'user.deleted':
-      console.log('User deleted:', data);
+      console.log('Deleting user:', data);
+      await ctx.runMutation(internal.users.deleteUser, {
+        _id: data.id,
+      });
       break;
   }
   return new Response();

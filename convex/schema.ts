@@ -2,8 +2,8 @@ import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
 
 export const User = {
-  email: v.string(),
   clerkId: v.string(),
+  email: v.string(),
   firstName: v.optional(v.string()),
   lastName: v.optional(v.string()),
   imageUrl: v.optional(v.string()),
@@ -12,8 +12,9 @@ export const User = {
 
 export const CivilGuard = {
   userId: v.id('users'),
-  firstName: v.optional(v.string()),
-  lastName: v.optional(v.string()),
+  badgeNumber: v.string(),
+  rank: v.string(),
+  status: v.union(v.literal('active'), v.literal('inactive')),
 };
 
 export enum DutyType {
@@ -29,7 +30,9 @@ export const Duty = {
 };
 
 export default defineSchema({
-  users: defineTable(User),
+  users: defineTable(User)
+    .index('by_email', ['email'])
+    .index('by_clerk_id', ['clerkId']),
   civilGuards: defineTable(CivilGuard),
   duties: defineTable(Duty),
 });

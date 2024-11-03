@@ -1,9 +1,15 @@
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 
+/**
+ * Interface for secure token management operations
+ */
 export interface TokenCache {
+  /** Retrieves a token stored under the specified key */
   getToken: (key: string) => Promise<string | undefined | null>;
+  /** Stores a token value under the specified key */
   saveToken: (key: string, value: string) => Promise<void>;
+  /** Optional method to remove a token stored under the specified key */
   clearToken?: (key: string) => Promise<void>;
 }
 
@@ -33,5 +39,17 @@ const createTokenCache = (): TokenCache => {
   };
 };
 
+const createWebTokenCache = (): TokenCache => ({
+  async getToken(key: string) {
+    return localStorage.getItem(key);
+  },
+  async saveToken(key: string, value: string) {
+    localStorage.setItem(key, value);
+  },
+  async clearToken(key: string) {
+    localStorage.removeItem(key);
+  },
+});
+
 export const tokenCache =
-  Platform.OS === 'web' ? undefined : createTokenCache();
+  Platform.OS === 'web' ? createWebTokenCache() : createTokenCache();

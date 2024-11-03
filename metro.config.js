@@ -1,8 +1,9 @@
 // Learn more https://docs.expo.io/guides/customizing-metro
 const { getDefaultConfig } = require('expo/metro-config');
+const { getSentryExpoConfig } = require('@sentry/react-native/metro');
 
 /** @type {import('expo/metro-config').MetroConfig} */
-const config = getDefaultConfig(__dirname, {
+const config = getSentryExpoConfig(__dirname, {
   // [Web-only]: Enables CSS support in Metro.
   isCSSEnabled: true,
 });
@@ -14,5 +15,3 @@ module.exports = withTamagui(config, {
   config: './tamagui.config.ts',
   outputCSS: './tamagui-web.css',
 });
-
-module.exports = config;

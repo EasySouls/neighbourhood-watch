@@ -28,7 +28,7 @@ export default function LoginScreen() {
       const { createdSessionId, setActive } = await startOAuthFlow();
       console.log('createdSessionId: ', createdSessionId);
       if (createdSessionId) {
-        setActive!({ session: createdSessionId });
+        await setActive!({ session: createdSessionId });
       }
     } catch (error) {
       console.error('Error logging in with google: ', error);

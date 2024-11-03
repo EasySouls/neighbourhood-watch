@@ -40,17 +40,16 @@ export default [
 
     languageOptions: {
       parser: tsParser,
-      ecmaVersion: 5,
+      ecmaVersion: 'latest',
       sourceType: 'module',
 
       parserOptions: {
         project: 'tsconfig.json',
-        tsconfigRootDir: 'C:\\htmlastic\\neighbourhood-watch',
+        tsconfigRootDir: __dirname,
       },
     },
 
     rules: {
-      '@typescript-eslint/interface-name-prefix': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
@@ -63,4 +62,3 @@ export default [
     },
   },
 ];
-

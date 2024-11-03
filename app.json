@@ -37,7 +37,9 @@
           "android": {
             "newArchEnabled": true
           }
-        },
+        }
+      ],
+      [
         "expo-font",
         {
           "fonts": [
@@ -47,6 +49,14 @@
             "assets/fonts/Poppins-Thin.ttf",
             "assets/fonts/SpaceMono-Regular.ttf"
           ]
+        }
+      ],
+      [
+        "@sentry/react-native",
+        {
+          "organization": "htmlastic",
+          "project": "neighbourhood-watch",
+          "url": "https://sentry.io/"
         }
       ]
     ],

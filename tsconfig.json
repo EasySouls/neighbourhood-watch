@@ -12,7 +12,13 @@
         "./types/*",
         "./context/*"
       ]
-    },
+    }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".eslintrc.js"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".eslint.config.mjs",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ]
 }

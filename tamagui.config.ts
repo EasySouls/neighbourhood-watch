@@ -30,7 +30,15 @@ export const Container = styled(YStack, {
 
 // Maybe create a custom Tamagui configuration later
 
-const tamaguiConfig = createTamagui(config);
+// const tamaguiConfig = createTamagui({
+//   ...config,
+//   reactNative: true,
+// });
+
+const tamaguiConfig = createTamagui({
+  ...config,
+  reactNative: true,
+});
 
 export type Conf = typeof tamaguiConfig;
 

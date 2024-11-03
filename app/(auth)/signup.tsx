@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
+import { View, Text } from 'tamagui';
 import {
   StyleSheet,
-  View,
-  Text,
   TouchableOpacity,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
 import { showToast } from '../../lib/toast';
 import { StatusBar } from 'expo-status-bar';
@@ -59,7 +59,6 @@ export default function SignUpScreen() {
 
     if (res?.error) {
       showToast('Hiba történt a regisztráció során.');
-      setLoading(false);
       return;
     }
 
@@ -141,6 +140,14 @@ export default function SignUpScreen() {
         style={{ marginTop: 12, ...styles.verticallySpaced }}
         textStyle={textStyle}
       />
+      <Text style={[styles.verticallySpaced, styles.infoStyle]}>
+        A kódokat az egyesületük fogja megkapni, amint szerződést kötött az
+        alkalmazás használatára. Amennyiben még nincs szerződésük, látogassanak
+        el
+        <TouchableOpacity onPress={() => Linking.openURL('http://google.com')}>
+          <Text style={{ color: 'blue' }}>weboldalunkra!</Text>
+        </TouchableOpacity>
+      </Text>
       <FormField
         title="Email"
         value={email}
@@ -178,7 +185,8 @@ const styles = StyleSheet.create({
     display: 'flex',
   },
   buttonContainer: {
-    backgroundColor: '#0070f3',
+    width: '50%',
+    backgroundColor: '#1d3557',
     padding: 12,
     borderRadius: 10,
     margin: 8,
@@ -201,7 +209,22 @@ const styles = StyleSheet.create({
     paddingBottom: 4,
     alignSelf: 'stretch',
   },
+  verticallySpaced2: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: 'stretch',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   mt20: {
     marginTop: 20,
+  },
+  infoStyle: {
+    color: '#1d3557',
+    fontSize: 13,
+    paddingTop: 10,
+    paddingBottom: 20,
+    fontStyle: 'italic',
   },
 });

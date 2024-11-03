@@ -3,15 +3,9 @@ import React from 'react';
 
 export default function AuthLayout() {
   return (
-    <Stack>
-      <Stack.Screen
-        name="login"
-        options={{ headerShown: true, title: 'Neighbourhood Watch' }}
-      />
-      <Stack.Screen
-        name="signup"
-        options={{ headerShown: true, title: 'Neighbourhood Watch' }}
-      />
+    <Stack screenOptions={{ headerShown: false }} initialRouteName="login">
+      <Stack.Screen name="login" />
+      <Stack.Screen name="signup" />
     </Stack>
   );
 }

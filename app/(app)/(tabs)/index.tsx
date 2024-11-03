@@ -1,50 +1,60 @@
 import { StyleSheet } from 'react-native';
 
 import { Text, View } from 'react-native';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button } from 'tamagui';
 import { useRouter } from 'expo-router';
-import { useAuth } from '../../../context/AuthContext';
-import {
-  fetchActiveDuties,
-  fetchOwnActiveDuty,
-  stopActiveDuty,
-} from '../../../lib/duties';
 import ActiveCurrentPatrol from '../../../components/duties/ActiveCurrentPatrol';
 import ActiveDuties from '../../../components/duties/ActiveDuties';
 import React from 'react';
+import { DutyType } from '@/index';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
-  const { authState } = useAuth();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
-  const id = authState.civilGuard!.id;
-  const departmentId = authState.civilGuard!.departmentId;
+  const ownActiveDuty = {
+    data: {
+      id: '1',
+      started_at: new Date().toISOString(),
+      ended_at: new Date().toISOString(),
+      user: {
+        id: '1',
+        name: 'John Doe',
+      },
+      created_at: new Date().toISOString(),
+      description: 'Patrol',
+      plate_num: 'ABC-123',
+      userId: '1',
+      name: 'John Doe',
+      type: DutyType.DESK,
+    },
+  };
 
-  const activeDuties = useQuery({
-    queryKey: ['duties', 'active'],
-    queryFn: () => fetchActiveDuties(departmentId),
-  });
-
-  const ownActiveDuty = useQuery({
-    queryKey: ['duties', 'active', id],
-    queryFn: () => fetchOwnActiveDuty(),
-  });
-
-  const stopActiveDutyMutation = useMutation({
-    mutationKey: ['duties', 'active'],
-    mutationFn: (dutyId: string) => stopActiveDuty(dutyId),
-  });
+  const activeDuties = {
+    data: [
+      {
+        id: '1',
+        started_at: new Date().toISOString(),
+        ended_at: new Date().toISOString(),
+        user: {
+          id: '1',
+          name: 'John Doe',
+        },
+        created_at: new Date().toISOString(),
+        description: 'Patrol',
+        plate_num: 'ABC-123',
+        userId: '1',
+        name: 'John Doe',
+        type: DutyType.DESK,
+      },
+    ],
+  };
 
   return (
-    <View style={styles.container}>
+    <View style={{ ...styles.container, marginTop: insets.top }}>
       {ownActiveDuty.data ? (
-        <ActiveCurrentPatrol
-          duty={ownActiveDuty.data}
-          onEnd={() => {
-            stopActiveDutyMutation.mutate(ownActiveDuty.data!.id);
-          }}
-        />
+        <ActiveCurrentPatrol duty={ownActiveDuty.data} onEnd={() => {}} />
       ) : (
         <Text>You are not on duty</Text>
       )}

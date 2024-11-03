@@ -48,10 +48,6 @@ export default function LoginScreen() {
       return;
     }
 
-    // Need a little bit of delay so the jwt token can be saved
-    // If the user is immediately redirected, the token won't be found
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
     setLoading(false);
     router.replace('/(app)/');
   }
@@ -141,16 +137,20 @@ const styles = StyleSheet.create({
     padding: 12,
     width: '100%',
     display: 'flex',
+    justifyContent: 'center',
   },
   buttonContainer: {
-    backgroundColor: '#0070f3',
+    width: '50%',
+    backgroundColor: '#1d3557',
     padding: 12,
     borderRadius: 10,
     margin: 8,
   },
   googleButtonContainer: {
+    width: '50%',
     backgroundColor: 'white',
     padding: 12,
+    borderColor: '#1d3557',
     borderRadius: 10,
     margin: 8,
   },
@@ -167,6 +167,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   signupLink: {
+    fontSize: 15,
     fontWeight: 'bold',
     marginLeft: 8,
     textDecorationLine: 'underline',
@@ -182,6 +183,14 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 4,
     alignSelf: 'stretch',
+  },
+  verticallySpaced2: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: 'stretch',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   mt20: {
     marginTop: 20,

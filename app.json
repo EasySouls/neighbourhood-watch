@@ -37,6 +37,16 @@
           "android": {
             "newArchEnabled": true
           }
+        },
+        "expo-font",
+        {
+          "fonts": [
+            "assets/fonts/Poppins-Bold.ttf",
+            "assets/fonts/Poppins-Regular.ttf",
+            "assets/fonts/Poppins-SemiBold.ttf",
+            "assets/fonts/Poppins-Thin.ttf",
+            "assets/fonts/SpaceMono-Regular.ttf"
+          ]
         }
       ]
     ],

@@ -6,6 +6,10 @@
 - `yarn android` - builds the development build for your device and then runs it, supports hot reload
 
 When you open your editor don't forget to switch to your branch you want to work on.
+
+Before starting up the project, duplicate the .env.example file and rename it to .env.local. DO NOT add this to git, but it should be automatically excluded by the .gitignore file.
+Then fill in the neccessary values.
+
 If for some reason the `yarn prebuild` or the `yarn android` commands don't work you can start up expo with `yarn start -- -c` 
 (-c clears the build cache, could be useful after some heavy changes or weird errors), then switch from the development build to Expo Go with pressing `s`, then pressing `a` to open
 the project on Android with Expo Go.

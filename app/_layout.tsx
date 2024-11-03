@@ -40,7 +40,7 @@ import * as Sentry from '@sentry/react-native';
 import Constants, { ExecutionEnvironment } from 'expo-constants';
 
 export {
-  // Catch any errors thrown by the Layout component.
+  //Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from 'expo-router';
 
@@ -69,6 +69,10 @@ const convexClient = new ConvexReactClient(convexUrl, {
 
 LogBox.ignoreLogs(['Clerk: Clerk has been loaded with development keys']);
 
+// const routingInstrumentation = new Sentry.ReactNativeNavigationInstrumentation({
+//   enableTimeToInitialDisplay:
+//     Constants.executionEnvironment === ExecutionEnvironment.StoreClient, // Only in native builds, not in Expo Go,
+// });
 const routingInstrumentation = new Sentry.ReactNavigationInstrumentation({
   enableTimeToInitialDisplay:
     Constants.executionEnvironment === ExecutionEnvironment.StoreClient, // Only in native builds, not in Expo Go,
@@ -78,19 +82,19 @@ Sentry.init({
   dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
   attachScreenshot: true,
   tracesSampleRate: 1.0,
-  debug: true,
-  _experiments: {
-    profilesSampleRate: 1.0,
-    replaysSessionSampleRate: 1.0,
-    replaysOnErrorSampleRate: 1.0,
-  },
+  debug: false,
+  // _experiments: {
+  //   profilesSampleRate: 1.0,
+  //   replaysSessionSampleRate: 1.0,
+  //   replaysOnErrorSampleRate: 1.0,
+  // },
   integrations: [
     new Sentry.ReactNativeTracing({
       routingInstrumentation,
       enableNativeFramesTracking:
         Constants.executionEnvironment === ExecutionEnvironment.StoreClient, // Only in native builds, not in Expo Go,
     }),
-    Sentry.mobileReplayIntegration(),
+    // Sentry.mobileReplayIntegration(),
   ],
 });
 
@@ -101,9 +105,6 @@ function RootLayoutNav() {
   const { isLoading, isAuthenticated } = useConvexAuth();
   const router = useRouter();
   const user = useUser();
-
-  // Capture the NavigationContainer ref and register it with the instrumentation.
-  const ref = useNavigationContainerRef();
 
   useOnlineManager();
 
@@ -154,12 +155,6 @@ function RootLayoutNav() {
     }
   }, [user]);
 
-  useEffect(() => {
-    if (ref?.current) {
-      routingInstrumentation.registerNavigationContainer(ref);
-    }
-  }, [ref]);
-
   if (!fontsLoaded) {
     return null;
   }
@@ -173,6 +168,15 @@ function RootLayoutNav() {
 
 function RootLayout() {
   const colorScheme = useColorScheme();
+
+  // Capture the NavigationContainer ref and register it with the instrumentation.
+  const ref = useNavigationContainerRef();
+
+  useEffect(() => {
+    if (ref) {
+      routingInstrumentation.registerNavigationContainer(ref);
+    }
+  }, [ref]);
 
   return (
     <ClerkProvider publishableKey={publishableKey!} tokenCache={tokenCache}>

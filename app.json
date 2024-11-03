@@ -52,7 +52,7 @@
         }
       ],
       [
-        "@sentry/react-native/expo",
+        "@sentry/react-native",
         {
           "organization": "htmlastic",
           "project": "neighbourhood-watch",

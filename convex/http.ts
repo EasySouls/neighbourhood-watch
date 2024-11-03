@@ -41,6 +41,11 @@ export const handleClerkWebhook = httpAction(async (ctx, request) => {
   return new Response();
 });
 
+/**
+ * Webhook endpoint for Clerk user events.
+ * @path /clerk-users-webhook
+ * @method POST
+ */
 http.route({
   path: '/clerk-users-webhook',
   method: 'POST',

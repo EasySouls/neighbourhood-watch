@@ -8,6 +8,7 @@ import ActiveDuties from '../../../components/duties/ActiveDuties';
 import React from 'react';
 import { DutyType } from '@/index';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as Sentry from '@sentry/react-native';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -53,6 +54,7 @@ export default function HomeScreen() {
 
   return (
     <View style={{ ...styles.container, marginTop: insets.top }}>
+      <Button onPress={() => Sentry.nativeCrash()}>Simulate Crash</Button>
       {ownActiveDuty.data ? (
         <ActiveCurrentPatrol duty={ownActiveDuty.data} onEnd={() => {}} />
       ) : (

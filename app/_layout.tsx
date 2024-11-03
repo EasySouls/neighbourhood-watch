@@ -7,15 +7,14 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from '@react-navigation/native';
-import { Slot, useRouter } from 'expo-router';
+import { Slot, useNavigationContainerRef, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '../components/useColorScheme';
 import { LogBox } from 'react-native';
-import { useAuth } from '@clerk/clerk-expo';
-// import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useAuth, useUser } from '@clerk/clerk-expo';
 import { focusManager, QueryClientProvider } from '@tanstack/react-query';
 import { AppStateStatus, Platform } from 'react-native';
 import { useOnlineManager } from '../hooks/useOnlineManager';
@@ -23,7 +22,6 @@ import { useAppState } from '../hooks/useAppState';
 import { initAxios, queryClient } from '../lib/queryClient';
 import { AuthProvider } from '../context/AuthContext';
 import { TamaguiProvider } from 'tamagui';
-// import { TamaguiProvider } from '@tamagui/web';
 import tamaguiConfig from '../tamagui.config';
 import React from 'react';
 import {
@@ -38,6 +36,8 @@ import { ConvexReactClient, useConvexAuth } from 'convex/react';
 import { ConvexProviderWithClerk } from 'convex/react-clerk';
 import { tokenCache } from '@/tokenCache';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import * as Sentry from '@sentry/react-native';
+import Constants, { ExecutionEnvironment } from 'expo-constants';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -69,12 +69,41 @@ const convexClient = new ConvexReactClient(convexUrl, {
 
 LogBox.ignoreLogs(['Clerk: Clerk has been loaded with development keys']);
 
+const routingInstrumentation = new Sentry.ReactNavigationInstrumentation({
+  enableTimeToInitialDisplay:
+    Constants.executionEnvironment === ExecutionEnvironment.StoreClient, // Only in native builds, not in Expo Go,
+});
+
+Sentry.init({
+  dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
+  attachScreenshot: true,
+  tracesSampleRate: 1.0,
+  debug: true,
+  _experiments: {
+    profilesSampleRate: 1.0,
+    replaysSessionSampleRate: 1.0,
+    replaysOnErrorSampleRate: 1.0,
+  },
+  integrations: [
+    new Sentry.ReactNativeTracing({
+      routingInstrumentation,
+      enableNativeFramesTracking:
+        Constants.executionEnvironment === ExecutionEnvironment.StoreClient, // Only in native builds, not in Expo Go,
+    }),
+    Sentry.mobileReplayIntegration(),
+  ],
+});
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 function RootLayoutNav() {
   const { isLoading, isAuthenticated } = useConvexAuth();
   const router = useRouter();
+  const user = useUser();
+
+  // Capture the NavigationContainer ref and register it with the instrumentation.
+  const ref = useNavigationContainerRef();
 
   useOnlineManager();
 
@@ -113,6 +142,23 @@ function RootLayoutNav() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isLoading]);
+
+  useEffect(() => {
+    if (user && user.user) {
+      Sentry.setUser({
+        email: user.user.emailAddresses[0].emailAddress,
+        id: user.user.id,
+      });
+    } else {
+      Sentry.setUser(null);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (ref?.current) {
+      routingInstrumentation.registerNavigationContainer(ref);
+    }
+  }, [ref]);
 
   if (!fontsLoaded) {
     return null;
@@ -155,4 +201,4 @@ function onAppStateChange(status: AppStateStatus) {
   }
 }
 
-export default RootLayout;
+export default Sentry.wrap(RootLayout);

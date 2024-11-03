@@ -28,13 +28,6 @@ export const Container = styled(YStack, {
   padding: 24,
 });
 
-// Maybe create a custom Tamagui configuration later
-
-// const tamaguiConfig = createTamagui({
-//   ...config,
-//   reactNative: true,
-// });
-
 const tamaguiConfig = createTamagui({
   ...config,
   reactNative: true,

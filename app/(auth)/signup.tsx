@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-} from 'tamagui'
+import { View, Text } from 'tamagui';
 import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  Pressable,
   Linking,
 } from 'react-native';
 import { showToast } from '../../lib/toast';
@@ -15,7 +11,6 @@ import { StatusBar } from 'expo-status-bar';
 import FormField from '../../components/forms/FormField';
 import { useAuth } from '../../context/AuthContext';
 import { useColorScheme } from '../../components/useColorScheme';
-import { Link } from 'expo-router';
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -68,7 +63,7 @@ export default function SignUpScreen() {
     }
 
     showToast(
-      `Sikeres regisztráció ${res?.account?.name} néven! Most már bejelentkezhetsz.`
+      `Sikeres regisztráció ${res?.account?.name} néven! Most már bejelentkezhetsz.`,
     );
 
     setLoading(false);
@@ -79,41 +74,43 @@ export default function SignUpScreen() {
 
   const textStyle =
     colorScheme === 'dark' ? styles.darkThemeText : styles.lightThemeText;
-  const buttonTextStyle =
-    colorScheme === 'dark' ? styles.darkThemeText : styles.lightThemeText;
+  //const buttonTextStyle =
+  //  colorScheme === 'dark' ? styles.darkThemeText : styles.lightThemeText;
   const registerTextStyle =
     colorScheme === 'dark' ? styles.lightThemeText : styles.darkThemeText;
 
   if (isValidCode) {
     return (
-      <View style={[styles.container, { marginTop: insets.top }]}>
-        <View style={[styles.verticallySpaced, styles.mt20]}>
+      <View style={{ ...styles.container, marginTop: insets.top }}>
+        <View style={{ ...styles.verticallySpaced, ...styles.mt20 }}>
           <FormPasswordField
-            title='Jelszó'
+            title="Jelszó"
             value={form.password}
-            placeholder='********'
+            placeholder="********"
             onChangeText={(text) => setForm({ ...form, password: text })}
-            style={[{ marginTop: 12 }, styles.verticallySpaced]}
+            style={{ marginTop: 12, ...styles.verticallySpaced }}
             textStyle={textStyle}
           />
         </View>
         <View style={styles.verticallySpaced}>
           <FormPasswordField
-            title='Jelszó megerősítése'
+            title="Jelszó megerősítése"
             value={form.passwordAgain}
-            placeholder='super-secret-password'
+            placeholder="super-secret-password"
             onChangeText={(text) => setForm({ ...form, passwordAgain: text })}
-            style={[{ marginTop: 12 }, styles.verticallySpaced]}
+            style={{ marginTop: 12, ...styles.verticallySpaced }}
             textStyle={textStyle}
           />
         </View>
-        <View style={[styles.verticallySpaced, styles.mt20, { width: '40%' }]}>
+        <View
+          style={{ ...styles.verticallySpaced, ...styles.mt20, width: '40%' }}
+        >
           <TouchableOpacity
             disabled={loading}
             style={styles.buttonContainer}
             onPress={() => signUp()}
           >
-            <Text style={[styles.buttonText, registerTextStyle]}>
+            <Text style={{ ...styles.buttonText, ...registerTextStyle }}>
               REGISZTRÁCIÓ
             </Text>
           </TouchableOpacity>
@@ -125,48 +122,41 @@ export default function SignUpScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <Text
-        style={[
-          styles.verticallySpaced,
-          textStyle,
-          { fontSize: 24, 
-            marginTop: 20, 
-            marginBottom: 20, 
-            fontWeight: 'bold', },
-        ]}
+        style={{
+          ...styles.verticallySpaced,
+          ...textStyle,
+          fontSize: 24,
+          marginTop: 20,
+          marginBottom: 20,
+        }}
       >
         Lépj be az email címeddel és a kapott kóddal
       </Text>
       <FormField
-        title='Kód'
+        title="Kód"
         value={code}
         onChangeText={(e) => setCode(e)}
-        placeholder='******'
-        style={[{ marginTop: 12 }, styles.verticallySpaced]}
+        placeholder="******"
+        style={{ marginTop: 12, ...styles.verticallySpaced }}
         textStyle={textStyle}
       />
-      <Text style={[
-          styles.verticallySpaced,
-          styles.infoStyle,
-          ]}>
-            A kódokat az egyesületük fogja megkapni, 
-            amint szerződést kötött az alkalmazás használatára.
-            Amennyiben még nincs szerződésük, látogassanak el
-            <TouchableOpacity onPress={() => Linking.openURL('http://google.com')}>
-              <Text style={{color: 'blue'
-              }}>
-                  weboldalunkra!
-              </Text>
-            </TouchableOpacity>
+      <Text style={[styles.verticallySpaced, styles.infoStyle]}>
+        A kódokat az egyesületük fogja megkapni, amint szerződést kötött az
+        alkalmazás használatára. Amennyiben még nincs szerződésük, látogassanak
+        el
+        <TouchableOpacity onPress={() => Linking.openURL('http://google.com')}>
+          <Text style={{ color: 'blue' }}>weboldalunkra!</Text>
+        </TouchableOpacity>
       </Text>
       <FormField
-        title='Email'
+        title="Email"
         value={email}
         onChangeText={(e) => setEmail(e)}
-        placeholder='example@gmail.com'
-        style={[{ marginTop: 12 }, styles.verticallySpaced]}
+        placeholder="example@gmail.com"
+        style={{ marginTop: 12, ...styles.verticallySpaced }}
         textStyle={textStyle}
       />
-      <View style={[styles.verticallySpaced2, styles.mt20]}>
+      <View style={{ ...styles.verticallySpaced, ...styles.mt20 }}>
         <TouchableOpacity
           disabled={loading}
           style={styles.buttonContainer}
@@ -177,12 +167,12 @@ export default function SignUpScreen() {
       </View>
       {loading && (
         <ActivityIndicator
-          size='large'
-          color='#0070f3'
+          size="large"
+          color="#0070f3"
           style={styles.verticallySpaced}
         />
       )}
-      <StatusBar style='auto' backgroundColor='#161622' />
+      <StatusBar style="auto" backgroundColor="#161622" />
     </SafeAreaView>
   );
 }
@@ -236,5 +226,5 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 20,
     fontStyle: 'italic',
-  }
+  },
 });

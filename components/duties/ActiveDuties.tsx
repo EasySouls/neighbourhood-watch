@@ -1,5 +1,6 @@
 import { View, Text, FlatList } from 'react-native';
 import { Duty } from '../../types';
+import React from 'react';
 
 interface ActiveDutiesProps {
   duties: Duty[];

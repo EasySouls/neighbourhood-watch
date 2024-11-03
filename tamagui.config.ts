@@ -2,6 +2,7 @@ import { config } from '@tamagui/config/v3';
 import { createAnimations } from '@tamagui/animations-moti';
 import { createTamagui, styled, YStack } from 'tamagui';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const animations = createAnimations({
   bouncy: {
     type: 'spring',
@@ -29,12 +30,21 @@ export const Container = styled(YStack, {
 
 // Maybe create a custom Tamagui configuration later
 
-export const tamaguiConfig = createTamagui(config);
+// const tamaguiConfig = createTamagui({
+//   ...config,
+//   reactNative: true,
+// });
 
-export default tamaguiConfig;
+const tamaguiConfig = createTamagui({
+  ...config,
+  reactNative: true,
+});
 
 export type Conf = typeof tamaguiConfig;
 
 declare module 'tamagui' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface TamaguiCustomConfig extends Conf {}
 }
+
+export default tamaguiConfig;
